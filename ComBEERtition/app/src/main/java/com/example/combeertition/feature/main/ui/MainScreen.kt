@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -35,18 +37,39 @@ fun MainScreen() {
                         BottomNavigationItemApp.Competitions.routeName -> Text(stringResource(BottomNavigationItemApp.Competitions.title))
                         BottomNavigationItemApp.Teams.routeName -> Text(stringResource(BottomNavigationItemApp.Teams.title))
                         BottomNavigationItemApp.Players.routeName -> Text(stringResource(BottomNavigationItemApp.Players.title))
+                        "addPlayer" -> Text("Spieler hinzufügen")
+                        "addTeam" -> Text("Team hinzufügen")
                     }
                 },
+                navigationIcon =
+                    {
+                        IconButton(onClick = { navController.navigateUp() }) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Back"
+                            )
+                        }
+                    }
             )
         },
             floatingActionButton = {
+                if ( when (currentRoute.value?.destination?.route) {
+                        "competitions", "teams", "players" -> true
+                        else -> false
+                    }) {
                     FloatingActionButton(
                         onClick = {
                             when (currentRoute.value?.destination?.route) {
                                 //Overlay öffnen
-                                "competitons" ->  {  }
-                                "teams" -> { }
-                                "players" -> { }
+                                "competitions" -> {
+                                    navController.navigate("competitionDetail")
+                                }
+                                "teams" -> {
+                                    navController.navigate("addTeam")
+                                }
+                                "players" -> {
+                                    navController.navigate("addPlayer")
+                                }
                             }
                         },
                         content = {
@@ -57,8 +80,12 @@ fun MainScreen() {
                             )
                         }
                     )
+                }
             },
-        bottomBar = { MainBottomNavigation(navController) }
+        bottomBar = { if ( when (currentRoute.value?.destination?.route) {
+                "competitions", "teams", "players" -> true
+                else -> false
+            }) MainBottomNavigation(navController) }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             MainNavigationGraph(navController)

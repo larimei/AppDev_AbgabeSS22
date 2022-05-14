@@ -13,18 +13,5 @@ import androidx.compose.ui.window.Popup
 
 @Composable
 fun AddPlayerScreen() {
-        Box {
-            val popupWidth = 200.dp
-            val popupHeight = 50.dp
-            val cornerSize = 16.dp
 
-            Popup(alignment = Alignment.Center) {
-                // Draw a rectangle shape with rounded corners inside the popup
-                Box(
-                    Modifier
-                        .size(popupWidth, popupHeight)
-                        .background(Color.White, RoundedCornerShape(cornerSize))
-                )
-            }
-        }
     }
