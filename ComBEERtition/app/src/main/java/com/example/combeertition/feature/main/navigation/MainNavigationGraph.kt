@@ -7,7 +7,6 @@ import androidx.navigation.compose.composable
 import com.example.combeertition.feature.competitions.CompetitionsScreen
 import com.example.combeertition.feature.competitions.detail.CompetitionDetailScreen
 import com.example.combeertition.feature.player.PlayersScreen
-import com.example.combeertition.feature.player.detail.AddPlayerScreen
 import com.example.combeertition.feature.player.detail.PlayerDetailScreen
 import com.example.combeertition.feature.teams.TeamsScreen
 import com.example.combeertition.feature.teams.detail.AddTeamScreen
@@ -25,11 +24,8 @@ fun MainNavigationGraph(navController: NavHostController) {
         composable(BottomNavigationItemApp.Players.routeName) {
             PlayersScreen()
         }
-        composable("addPlayer") {
-            AddPlayerScreen()
-        }
-        composable("playerDetail") {
-            //PlayerDetailScreen()
+        composable("player/{playerId}") { backStackEntry ->
+            PlayerDetailScreen(navController, backStackEntry.arguments?.getString("playerId"))
         }
         composable("addTeam") {
             AddTeamScreen()

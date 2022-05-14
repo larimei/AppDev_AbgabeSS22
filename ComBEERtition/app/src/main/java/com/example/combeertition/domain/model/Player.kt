@@ -36,8 +36,7 @@ class Player private constructor(
             name: String,
             icon: Int,
             color: Color
-        ): Player? {
-            if (name.isBlank()) return null
+        ): Player {
             val now = ZonedDateTime.now()
             return Player(id, name, icon, color, now, now, now)
         }
