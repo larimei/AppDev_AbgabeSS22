@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.combeertition.feature.player.PlayersScreen
+import com.example.combeertition.feature.teams.TeamsScreen
 
 @Composable
 fun MainNavigationGraph(navController: NavHostController) {
@@ -19,13 +20,6 @@ fun MainNavigationGraph(navController: NavHostController) {
             PlayersScreen()
         }
     }
-}
-
-
-
-@Composable
-fun TeamsScreen() {
-
 }
 
 @Composable

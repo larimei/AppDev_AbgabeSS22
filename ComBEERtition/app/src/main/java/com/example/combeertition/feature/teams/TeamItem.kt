@@ -1,4 +1,4 @@
-package com.example.combeertition.feature.player
+package com.example.combeertition.feature.teams
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -21,11 +21,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.combeertition.R
-import com.example.combeertition.domain.model.PlayerId
+import com.example.combeertition.domain.model.TeamId
 
 
 @Composable
-fun PlayerItem(player: PlayerUI, deletePlayer: (id: PlayerId) -> Unit) {
+fun TeamItem(team: TeamUI, deleteTeam: (id: TeamId) -> Unit) {
     Card(
         elevation = 3.dp,
         modifier = Modifier.padding(8.dp),
@@ -37,8 +37,8 @@ fun PlayerItem(player: PlayerUI, deletePlayer: (id: PlayerId) -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Image(
-                painter = painterResource(player.icon),
-                contentDescription = player.name,
+                painter = painterResource(team.icon),
+                contentDescription = team.name,
                 modifier = Modifier
                     .size(50.dp)
                     .padding(end = 8.dp),
@@ -47,7 +47,7 @@ fun PlayerItem(player: PlayerUI, deletePlayer: (id: PlayerId) -> Unit) {
                 modifier = Modifier.weight(1f),
             ) {
                 Text(
-                    text = player.name,
+                    text = team.name,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -57,9 +57,9 @@ fun PlayerItem(player: PlayerUI, deletePlayer: (id: PlayerId) -> Unit) {
                 modifier = Modifier.align(Alignment.CenterVertically),
             ) {
                 IconButton(
-                    onClick = { deletePlayer(player.id) },
+                    onClick = { deleteTeam(team.id) },
                 ) {
-                    Icon(painterResource(R.drawable.ic_baseline_delete_outline_24), contentDescription = "delete player")
+                    Icon(painterResource(R.drawable.ic_baseline_delete_outline_24), contentDescription = "delete team")
                 }
             }
         }
@@ -68,12 +68,12 @@ fun PlayerItem(player: PlayerUI, deletePlayer: (id: PlayerId) -> Unit) {
 
 @Preview
 @Composable
-fun PlayerItem_Preview() {
-    PlayerItem(
-        PlayerUI(
-            PlayerId("foo"),
+fun TeamItem_Preview() {
+    TeamItem(
+        TeamUI(
+            TeamId("foo"),
             "Lara",
-            R.drawable.ic_player,
+            R.drawable.ic_team,
         )
     ) {}
 }
