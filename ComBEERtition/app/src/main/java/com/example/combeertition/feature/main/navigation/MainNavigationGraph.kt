@@ -29,7 +29,7 @@ fun MainNavigationGraph(navController: NavHostController) {
             AddPlayerScreen()
         }
         composable("playerDetail") {
-            PlayerDetailScreen()
+            //PlayerDetailScreen()
         }
         composable("addTeam") {
             AddTeamScreen()

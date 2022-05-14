@@ -37,8 +37,9 @@ fun MainScreen() {
                         BottomNavigationItemApp.Competitions.routeName -> Text(stringResource(BottomNavigationItemApp.Competitions.title))
                         BottomNavigationItemApp.Teams.routeName -> Text(stringResource(BottomNavigationItemApp.Teams.title))
                         BottomNavigationItemApp.Players.routeName -> Text(stringResource(BottomNavigationItemApp.Players.title))
-                        "addPlayer" -> Text("Spieler hinzufügen")
-                        "addTeam" -> Text("Team hinzufügen")
+                        "playerDetail" -> Text("Spieler")
+                        "teamDetail" -> Text("Team")
+                        "competitionDetail" -> Text("Turnier")
                     }
                 },
                 navigationIcon =
@@ -65,7 +66,7 @@ fun MainScreen() {
                                     navController.navigate("competitionDetail")
                                 }
                                 "teams" -> {
-                                    navController.navigate("addTeam")
+                                    navController.navigate("teamDetail")
                                 }
                                 "players" -> {
                                     navController.navigate("addPlayer")
