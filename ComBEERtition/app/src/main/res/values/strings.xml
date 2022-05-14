@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">ComBEERtition</string>
+    <string name="players_title_navigation">Spieler</string>
+    <string name="teams_title_navigation">Teams</string>
+    <string name="competitions_title_navigation">Turniere</string>
+</resources>
