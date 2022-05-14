@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.combeertition.feature.competitions.CompetitionsScreen
 import com.example.combeertition.feature.player.PlayersScreen
 import com.example.combeertition.feature.teams.TeamsScreen
 
@@ -20,9 +21,4 @@ fun MainNavigationGraph(navController: NavHostController) {
             PlayersScreen()
         }
     }
-}
-
-@Composable
-fun CompetitionsScreen() {
-
 }

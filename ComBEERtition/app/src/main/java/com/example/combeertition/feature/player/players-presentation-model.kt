@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import com.example.combeertition.domain.model.PlayerId
 
 class PlayersScreenUI(
-    val products: List<PlayerUI>,
+    val players: List<PlayerUI>,
 )
 
 

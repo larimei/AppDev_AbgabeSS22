@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import com.example.combeertition.domain.model.TeamId
 
 class TeamsScreenUI(
-    val products: List<TeamUI>,
+    val teams: List<TeamUI>,
 )
 
 

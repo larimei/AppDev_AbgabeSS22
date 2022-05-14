@@ -2,9 +2,9 @@ package com.example.combeertition.domain.model
 
 data class Round(
     val id: String,
-    val firstTeam: Team,
-    val opponentTeam: Team,
+    val firstTeam: String,
+    val opponentTeam: String,
     val round: Int,  //Achtel, Viertel, Halbfinale etc.
-    val winner: Team
+    val winner: String
 )
 

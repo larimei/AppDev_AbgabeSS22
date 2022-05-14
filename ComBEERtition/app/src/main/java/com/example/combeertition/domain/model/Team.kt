@@ -10,6 +10,7 @@ class Team private constructor(
     val id: TeamId,
     val name: String,
     val icon: Int,
+    val players: List<String>,
     val created: ZonedDateTime,
     val updated: ZonedDateTime,
     val deleted: ZonedDateTime,
@@ -33,10 +34,11 @@ class Team private constructor(
             id: TeamId,
             name: String,
             icon: Int,
+            players: List<String>
         ): Team? {
             if (name.isBlank()) return null
             val now = ZonedDateTime.now()
-            return Team(id, name, icon, now, now, now)
+            return Team(id, name, icon, players, now, now, now)
         }
     }
 }
