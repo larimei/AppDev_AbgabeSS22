@@ -1,4 +1,4 @@
-package com.example.combeertition.feature.competition
+package com.example.combeertition.feature.competitions
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -22,6 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.combeertition.R
 import com.example.combeertition.domain.model.CompetitionId
+import com.example.combeertition.feature.competition.CompetitionUI
+import com.example.combeertition.ui.theme.RsRed
 
 
 @Composable
@@ -35,20 +38,26 @@ fun CompetitionItem(competition: CompetitionUI, deleteCompetition: (id: Competit
                 .padding(16.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
+            Icon(
                 painter = painterResource(competition.icon),
                 contentDescription = competition.name,
                 modifier = Modifier
                     .size(50.dp)
                     .padding(end = 8.dp),
+                tint = competition.color
             )
-            Column(
-                modifier = Modifier.weight(1f),
-            ) {
-                Text(
+            Column (){
+                 Text(
                     text = competition.name,
                     fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    text = competition.mode,
+                    fontWeight = FontWeight.Medium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -59,7 +68,9 @@ fun CompetitionItem(competition: CompetitionUI, deleteCompetition: (id: Competit
                 IconButton(
                     onClick = { deleteCompetition(competition.id) },
                 ) {
-                    Icon(painterResource(R.drawable.ic_baseline_delete_outline_24), contentDescription = "delete competition")
+                    Icon(painterResource(R.drawable.ic_baseline_delete_24),
+                        contentDescription = "delete competition",
+                        tint = RsRed)
                 }
             }
         }
@@ -74,6 +85,8 @@ fun CompetitionItem_Preview() {
             CompetitionId("foo"),
             "Lara",
             R.drawable.ic_competition,
+            Color.Green,
+            "Knockout"
         )
     ) {}
 }

@@ -16,7 +16,8 @@ class PlayersViewModel : ViewModel() {
                 PlayerUI(
                     id = player.id,
                     name = player.name,
-                    icon = player.icon
+                    icon = player.icon,
+                    color = player.color
                 )
             }.sortedBy { it.name }
         )

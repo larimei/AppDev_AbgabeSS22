@@ -1,5 +1,6 @@
 package com.example.combeertition.data
 
+import androidx.compose.ui.graphics.Color
 import com.example.combeertition.R
 import com.example.combeertition.domain.model.Player
 import com.example.combeertition.domain.model.PlayerId
@@ -12,31 +13,37 @@ class PlayerRepository {
             id = PlayerId("a"),
             name = "Lara Miester",
             icon = R.drawable.ic_player,
+            Color.Cyan
         ),
         Player.create(
             id = PlayerId("b"),
             name = "Lara aerg",
             icon = R.drawable.ic_player,
+            Color.Cyan
         ),
         Player.create(
             id = PlayerId("c"),
             name = "Lara seg",
             icon = R.drawable.ic_player,
+            Color.Cyan
         ),
         Player.create(
             id = PlayerId("d"),
             name = "Lara eaerhaerh",
             icon = R.drawable.ic_player,
+            Color.Cyan
         ),
         Player.create(
             id = PlayerId("e"),
             name = "Laaerhra Miester",
             icon = R.drawable.ic_player,
+            Color.Cyan
         ),
         Player.create(
             id = PlayerId("f"),
             name = "Lara Miester",
             icon = R.drawable.ic_player,
+            Color.Cyan
         ),
     )
 

@@ -16,7 +16,8 @@ class TeamsViewModel : ViewModel() {
                 TeamUI(
                     id = team.id,
                     name = team.name,
-                    icon = team.icon
+                    icon = team.icon,
+                    color = team.color
                 )
             }.sortedBy { it.name }
         )

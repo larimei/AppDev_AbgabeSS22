@@ -1,5 +1,6 @@
 package com.example.combeertition.data
 
+import androidx.compose.ui.graphics.Color
 import com.example.combeertition.R
 import com.example.combeertition.domain.model.Competition
 import com.example.combeertition.domain.model.CompetitionId
@@ -14,7 +15,9 @@ class CompetitionRepository {
             teams = listOf("a"),
             mode="",
             rounds = emptyList(),
-            icon = R.drawable.ic_competition),
+            icon = R.drawable.ic_competition,
+            color = Color.Magenta
+        ),
         Competition.create(
             id = CompetitionId("bc"),
             name = "Competition 2",
@@ -22,6 +25,7 @@ class CompetitionRepository {
             mode="",
             rounds = emptyList(),
             icon = R.drawable.ic_competition,
+            color = Color.Magenta
         ),
         Competition.create(
             id = CompetitionId("cc"),
@@ -30,6 +34,7 @@ class CompetitionRepository {
             mode="",
             rounds = emptyList(),
             icon = R.drawable.ic_competition,
+            color = Color.Magenta
         ),
         Competition.create(
             id = CompetitionId("ccc"),
@@ -38,22 +43,25 @@ class CompetitionRepository {
             mode="",
             rounds = emptyList(),
             icon = R.drawable.ic_competition,
+            color = Color.Magenta
         ),
         Competition.create(
             id = CompetitionId("ec"),
             name = "Competition 5",
             teams = emptyList(),
-            mode="",
+            mode="One vs One",
             rounds = emptyList(),
             icon = R.drawable.ic_competition,
+            color = Color.Magenta
         ),
         Competition.create(
             id = CompetitionId("fc"),
             name = "Competition 6",
             teams = emptyList(),
-            mode="",
+            mode="Knockout",
             rounds = emptyList(),
             icon = R.drawable.ic_competition,
+            color = Color.Magenta
             ),
     )
 

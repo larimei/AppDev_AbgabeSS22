@@ -1,5 +1,6 @@
 package com.example.combeertition.domain.model
 
+import androidx.compose.ui.graphics.Color
 import java.time.ZonedDateTime
 
 @JvmInline
@@ -10,6 +11,7 @@ class Player private constructor(
     val id: PlayerId,
     val name: String,
     val icon: Int,
+    val color: Color,
     val created: ZonedDateTime,
     val updated: ZonedDateTime,
     val deleted: ZonedDateTime,
@@ -33,10 +35,11 @@ class Player private constructor(
             id: PlayerId,
             name: String,
             icon: Int,
+            color: Color
         ): Player? {
             if (name.isBlank()) return null
             val now = ZonedDateTime.now()
-            return Player(id, name, icon, now, now, now)
+            return Player(id, name, icon, color, now, now, now)
         }
     }
 }

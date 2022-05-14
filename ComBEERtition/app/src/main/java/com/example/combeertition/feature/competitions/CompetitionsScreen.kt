@@ -10,7 +10,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.combeertition.domain.model.CompetitionId
-import com.example.combeertition.feature.competition.CompetitionItem
 import com.example.combeertition.feature.competition.CompetitionUI
 
 

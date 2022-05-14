@@ -17,7 +17,9 @@ class CompetitionsViewModel : ViewModel() {
                 CompetitionUI(
                     id = competition.id,
                     name = competition.name,
-                    icon = competition.icon
+                    icon = competition.icon,
+                    color = competition.color,
+                    mode = competition.mode
                 )
             }.sortedBy { it.name }
         )

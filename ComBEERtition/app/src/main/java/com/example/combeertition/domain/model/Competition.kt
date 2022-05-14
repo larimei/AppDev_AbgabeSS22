@@ -1,6 +1,6 @@
 package com.example.combeertition.domain.model
 
-import com.example.combeertition.feature.main.navigation.BottomNavigationItemApp
+import androidx.compose.ui.graphics.Color
 import java.time.ZonedDateTime
 
 @JvmInline
@@ -14,6 +14,7 @@ class Competition private constructor(
     val mode: String,
     val rounds: List<String>,
     val icon: Int,
+    val color: Color,
     val created: ZonedDateTime,
     val updated: ZonedDateTime,
     val deleted: ZonedDateTime,
@@ -39,11 +40,12 @@ class Competition private constructor(
             icon: Int,
             teams: List<String>,
             mode: String,
-            rounds: List<String>
+            rounds: List<String>,
+            color: Color
         ): Competition? {
             if (name.isBlank()) return null
             val now = ZonedDateTime.now()
-            return Competition(id, name, teams, mode, rounds, icon, now, now, now)
+            return Competition(id, name, teams, mode, rounds, icon, color, now, now, now)
         }
     }
 }
