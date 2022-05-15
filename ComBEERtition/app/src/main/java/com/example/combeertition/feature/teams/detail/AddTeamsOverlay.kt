@@ -20,18 +20,29 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.combeertition.R
 import com.example.combeertition.data.playerRepository
 import com.example.combeertition.feature.player.detail.createPlayer
 
 @Composable
-fun AddTeamsOverlay(openDialog: MutableState<Boolean>) {
+fun AddTeamsOverlay(
+    openDialog: MutableState<Boolean>,
+    viewModel: TeamDetailViewModel = viewModel()
+) {
+    AddTeamsOverlayUi(openDialog, viewModel::onAddTeams)
+}
+
+@Composable
+fun AddTeamsOverlayUi(
+    openDialog: MutableState<Boolean>,
+    onAddTeams: (count: Int, players: List<String>, random: Boolean) -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
     val items = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).map { it.toString() }
     var selectedIndex by remember { mutableStateOf(0) }
     val checkedState = remember { mutableStateOf(false) }
-    val checkedPlayers = remember { mutableStateOf(listOf("")) }
-    val scrollState = rememberLazyListState()
+    val players: MutableState<List<String>> = remember { mutableStateOf(emptyList()) }
 
     AlertDialog(
         onDismissRequest = {
@@ -44,7 +55,11 @@ fun AddTeamsOverlay(openDialog: MutableState<Boolean>) {
             Text(text = "Teams hinzufügen")
         },
         text = {
-            Box(modifier = Modifier.wrapContentSize(align = Alignment.TopStart).height(500.dp)) {
+            Box(
+                modifier = Modifier
+                    .wrapContentSize(align = Alignment.TopStart)
+                    .height(500.dp)
+            ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     OutlinedTextField(
                         label = {
@@ -105,13 +120,21 @@ fun AddTeamsOverlay(openDialog: MutableState<Boolean>) {
                                     ) {
                                         Text(text = player.name)
                                         IconButton(onClick = {
-
+                                            if (players.value.find { it == player.id.value } == null)
+                                                players.value = players.value.plus(player.id.value)
+                                            else
+                                                players.value =
+                                                    players.value.filter { it != player.id.value }
                                         }) {
                                             Icon(
-                                                painterResource(R.drawable.ic_baseline_add_24),
+                                                painterResource(
+                                                    if (players.value.find { it == player.id.value } == null)
+                                                        R.drawable.ic_baseline_add_24
+                                                    else
+                                                        R.drawable.ic_baseline_delete_24),
                                                 contentDescription = "add player",
                                                 tint = Color.Black,
-                                                modifier = Modifier.padding(horizontal= 4.dp)
+                                                modifier = Modifier.padding(horizontal = 4.dp)
                                             )
                                         }
                                     }
@@ -125,6 +148,7 @@ fun AddTeamsOverlay(openDialog: MutableState<Boolean>) {
         confirmButton = {
             Button(
                 onClick = {
+                    onAddTeams(items[selectedIndex].toInt(), players.value, checkedState.value)
                     openDialog.value = false
                 }) {
                 Text("Hinzufügen")

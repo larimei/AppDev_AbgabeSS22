@@ -1,6 +1,8 @@
 package com.example.combeertition.feature.teams.detail
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,26 +24,26 @@ import com.github.skydoves.colorpicker.compose.ColorEnvelope
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import java.util.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 
 @Composable
 fun TeamDetailScreen(teamIdString: String, viewModel: TeamDetailViewModel = viewModel()) {
-    TeamDetailScreenUI(teamIdString, viewModel::onAddTeam, viewModel::onUpdateTeam)
+    TeamDetailScreenUI(teamIdString, viewModel::onUpdateTeam)
 }
 
 
 @Composable
-fun TeamDetailScreenUI(teamIdString: String?,
-                       onAddTeam: (team: Team) -> Unit,
-                       onUpdateTeam: (teamId: TeamId, name: String, color: Color, players: List<String>) -> Unit) {
-    var teamId: TeamId? = TeamId(teamIdString ?: "new")
-    if (teamIdString == "new") {
-        teamId = null
-    }
-    val team = teamId?.let { teamRepository.getTeamById(it) }
+fun TeamDetailScreenUI(
+    teamIdString: String?,
+    onUpdateTeam: (teamId: TeamId, name: String, color: Color, players: List<String>) -> Unit
+) {
+    var teamId = TeamId(teamIdString ?: "new")
+    val team = teamRepository.getTeamById(teamId)
 
     var name by remember { mutableStateOf(team?.name ?: "") }
     var color by remember { mutableStateOf(team?.color ?: Color.Black) }
-    var players by remember { mutableStateOf(team?.players ?: emptyList())}
+    var players by remember { mutableStateOf(team?.players ?: emptyList()) }
 
     val controller = rememberColorPickerController()
     var set = false
@@ -56,11 +58,13 @@ fun TeamDetailScreenUI(teamIdString: String?,
             tint = color
         )
         OutlinedTextField(
-            label = { Text(
-                text = "Teamname/Motto",
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )},
+            label = {
+                Text(
+                    text = "Teamname/Motto",
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            },
             value = name,
             onValueChange = { name = it },
             modifier = Modifier
@@ -79,18 +83,29 @@ fun TeamDetailScreenUI(teamIdString: String?,
                 else set = true
             }
         )
+        //TODO schöner anordnen
+        LazyColumn() {
+            items(team?.players ?: emptyList()) { player ->
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = playerRepository.getPlayerById(PlayerId(player))?.name ?: "")
+                }
+            }
+        }
         Button(onClick = {
-            if (teamId == null)
-                onAddTeam(Team.create(TeamId(UUID.randomUUID().toString()), name, R.drawable.ic_team, color, players))
-            else
-                onUpdateTeam(teamId, name, color, players)
-        }, modifier = Modifier.fillMaxWidth().padding(horizontal=40.dp)) {
+            onUpdateTeam(teamId, name, color, players)
+        }, modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 40.dp)) {
             Row() {
                 Icon(
                     painterResource(R.drawable.ic_baseline_save_24),
                     contentDescription = "add team",
                     tint = Color.White,
-                    modifier = Modifier.padding(horizontal= 4.dp)
+                    modifier = Modifier.padding(horizontal = 4.dp)
                 )
                 Text(
                     text = (if (teamId == null) "Hinzufügen" else "Speichern"),

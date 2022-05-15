@@ -12,7 +12,7 @@ class Team private constructor(
     val name: String,
     val icon: Int,
     val color: Color,
-    val players: List<String>,
+    var players: List<String>,
     val created: ZonedDateTime,
     val updated: ZonedDateTime,
     val deleted: ZonedDateTime,
