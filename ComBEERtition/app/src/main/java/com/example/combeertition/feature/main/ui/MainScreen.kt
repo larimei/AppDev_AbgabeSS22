@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -21,13 +19,16 @@ import com.example.combeertition.feature.main.navigation.BottomNavigationItemApp
 import com.example.combeertition.feature.main.navigation.MainBottomNavigation
 import com.example.combeertition.feature.main.navigation.MainNavigationGraph
 import com.example.combeertition.R
+import com.example.combeertition.feature.teams.detail.AddTeamsOverlay
 
 var navControllerGlobal: NavHostController? = null
+
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryFlow
         .collectAsState(initial = navController.currentBackStackEntry)
+    val openDialog = remember { mutableStateOf(false) }
 
     navControllerGlobal = navController
 
@@ -38,63 +39,82 @@ fun MainScreen() {
             TopAppBar(
                 title = {
                     when (currentRoute) {
-                        BottomNavigationItemApp.Competitions.routeName -> Text(stringResource(BottomNavigationItemApp.Competitions.title))
-                        BottomNavigationItemApp.Teams.routeName -> Text(stringResource(BottomNavigationItemApp.Teams.title))
-                        BottomNavigationItemApp.Players.routeName -> Text(stringResource(BottomNavigationItemApp.Players.title))
+                        BottomNavigationItemApp.Competitions.routeName -> Text(
+                            stringResource(
+                                BottomNavigationItemApp.Competitions.title
+                            )
+                        )
+                        BottomNavigationItemApp.Teams.routeName -> Text(
+                            stringResource(
+                                BottomNavigationItemApp.Teams.title
+                            )
+                        )
+                        BottomNavigationItemApp.Players.routeName -> Text(
+                            stringResource(
+                                BottomNavigationItemApp.Players.title
+                            )
+                        )
                         "playerDetail" -> Text("Spieler")
                         "teamDetail" -> Text("Team")
                         "competitionDetail" -> Text("Turnier")
                     }
                 },
                 navigationIcon =
-                    {
-                        IconButton(onClick = { navController.navigateUp() }) {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowBack,
-                                contentDescription = "Back"
-                            )
-                        }
+                {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
                     }
+                }
             )
         },
-            floatingActionButton = {
-                if ( when (currentRoute.value?.destination?.route) {
-                        "competitions", "teams", "players" -> true
-                        else -> false
-                    }) {
-                    FloatingActionButton(
-                        onClick = {
-                            when (currentRoute.value?.destination?.route) {
-                                //Overlay öffnen
-                                "competitions" -> {
-                                    navController.navigate("competitionDetail")
-                                }
-                                "teams" -> {
-                                    navController.navigate("teamDetail")
-                                }
-                                "players" -> {
-                                    navController.navigate("player/new")
-                                }
-                            }
-                        },
-                        content = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_baseline_add_24),
-                                contentDescription = null,
-                                modifier = Modifier.size(28.dp)
-                            )
-                        }
-                    )
+        floatingActionButton = {
+            if (when (currentRoute.value?.destination?.route) {
+                    "competitions", "teams", "players" -> true
+                    else -> false
                 }
-            },
-        bottomBar = { if ( when (currentRoute.value?.destination?.route) {
-                "competitions", "teams", "players" -> true
-                else -> false
-            }) MainBottomNavigation(navController) }
+            ) {
+                FloatingActionButton(
+                    onClick = {
+                        when (currentRoute.value?.destination?.route) {
+                            //Overlay öffnen
+                            "competitions" -> {
+                                navController.navigate("competitionDetail")
+                            }
+                            "teams" -> {
+                                openDialog.value = true
+                            }
+                            "players" -> {
+                                navController.navigate("player/new")
+                            }
+                        }
+                    },
+                    content = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_baseline_add_24),
+                            contentDescription = null,
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
+                )
+            }
+        },
+        bottomBar = {
+            if (when (currentRoute.value?.destination?.route) {
+                    "competitions", "teams", "players" -> true
+                    else -> false
+                }
+            ) MainBottomNavigation(navController)
+        }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             MainNavigationGraph(navController)
         }
+    }
+    if (openDialog.value) {
+        AddTeamsOverlay(openDialog = openDialog)
     }
 }
 

@@ -9,7 +9,6 @@ import com.example.combeertition.feature.competitions.detail.CompetitionDetailSc
 import com.example.combeertition.feature.player.PlayersScreen
 import com.example.combeertition.feature.player.detail.PlayerDetailScreen
 import com.example.combeertition.feature.teams.TeamsScreen
-import com.example.combeertition.feature.teams.detail.AddTeamScreen
 import com.example.combeertition.feature.teams.detail.TeamDetailScreen
 
 @Composable
@@ -25,13 +24,11 @@ fun MainNavigationGraph(navController: NavHostController) {
             PlayersScreen()
         }
         composable("player/{playerId}") { backStackEntry ->
-            PlayerDetailScreen(navController, backStackEntry.arguments?.getString("playerId"))
+            backStackEntry.arguments?.getString("playerId")?.let { PlayerDetailScreen(it) }
         }
-        composable("addTeam") {
-            AddTeamScreen()
-        }
-        composable("teamDetail") {
-            TeamDetailScreen()
+        composable("team/{teamId}") {
+                backStackEntry ->
+            backStackEntry.arguments?.getString("teamId")?.let { TeamDetailScreen(it) }
         }
         composable("competitionDetail") {
             CompetitionDetailScreen()

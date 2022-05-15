@@ -1,10 +1,7 @@
 package com.example.combeertition.feature.player.detail
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,22 +10,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.combeertition.domain.model.Player
 import com.example.combeertition.R
-import com.example.combeertition.data.PlayerRepository
 import com.example.combeertition.data.playerRepository
-import com.example.combeertition.domain.AddPlayerUseCase
-import com.example.combeertition.domain.UpdatePlayerUseCase
 import com.example.combeertition.domain.model.PlayerId
-import com.example.combeertition.feature.main.ui.navControllerGlobal
 import com.github.skydoves.colorpicker.compose.ColorEnvelope
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
+import java.util.*
+
+@Composable
+fun PlayerDetailScreen(playerIdString: String, viewModel: PlayerDetailViewModel = viewModel()) {
+    PlayerDetailScreenUI(playerIdString, viewModel::onAddPlayer, viewModel::onUpdatePlayer)
+}
 
 
 @Composable
-fun PlayerDetailScreen(navController: NavHostController, playerIdString: String?) {
+fun PlayerDetailScreenUI(playerIdString: String?,
+                         onAddPlayer: (player: Player) -> Unit,
+                         onUpdatePlayer: (playerId: PlayerId, name: String, color: Color) -> Unit) {
     var playerId: PlayerId? = PlayerId(playerIdString ?: "new")
     if (playerIdString == "new") {
         playerId = null
@@ -50,7 +51,12 @@ fun PlayerDetailScreen(navController: NavHostController, playerIdString: String?
                 .padding(horizontal = 40.dp),
             tint = color
         )
-        TextField(
+        OutlinedTextField(
+            label = { Text(
+                text = "Spielername",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )},
             value = name,
             onValueChange = { name = it },
             modifier = Modifier
@@ -74,12 +80,13 @@ fun PlayerDetailScreen(navController: NavHostController, playerIdString: String?
                 onAddPlayer(createPlayer(name, color))
             else
                 onUpdatePlayer(playerId, name, color)
-        }) {
+        }, modifier = Modifier.fillMaxWidth().padding(horizontal=40.dp)) {
             Row() {
                 Icon(
-                    painterResource(R.drawable.ic_baseline_delete_24),
+                    painterResource(R.drawable.ic_baseline_save_24),
                     contentDescription = "add player",
-                    tint = Color.White
+                    tint = Color.White,
+                    modifier = Modifier.padding(horizontal= 4.dp)
                 )
                 Text(
                     text = (if (playerId == null) "Hinzufügen" else "Speichern"),
@@ -92,17 +99,8 @@ fun PlayerDetailScreen(navController: NavHostController, playerIdString: String?
     }
 }
 
-
 fun createPlayer(name: String, color: Color): Player {
-    return Player.create(PlayerId("sadg"), name, R.drawable.ic_player, color) //TODO unique id
+    return Player.create(PlayerId(UUID.randomUUID().toString()), name, R.drawable.ic_player, color) //TODO unique id
 }
 
-fun onAddPlayer(player: Player) {
-    AddPlayerUseCase()(player)
-    navControllerGlobal?.navigate("player/" + player.id.value)
-}
 
-fun onUpdatePlayer(playerId: PlayerId, name: String, color: Color) {
-    UpdatePlayerUseCase()(playerId, name, color) //TODO usecase noch implementieren
-    navControllerGlobal?.navigate("player/" + playerId.value)
-}

@@ -38,8 +38,7 @@ class Team private constructor(
             icon: Int,
             color: Color,
             players: List<String>
-        ): Team? {
-            if (name.isBlank()) return null
+        ): Team {
             val now = ZonedDateTime.now()
             return Team(id, name, icon, color, players, now, now, now)
         }
