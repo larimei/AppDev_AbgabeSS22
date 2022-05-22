@@ -100,7 +100,7 @@ fun PlayerDetailScreenUI(playerIdString: String?,
 }
 
 fun createPlayer(name: String, color: Color): Player {
-    return Player.create(PlayerId(UUID.randomUUID().toString()), name, R.drawable.ic_player, color) //TODO unique id
+    return Player.create(PlayerId(UUID.randomUUID().toString()), name, R.drawable.ic_player, color)
 }
 
 

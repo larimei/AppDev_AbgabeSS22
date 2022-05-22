@@ -26,16 +26,23 @@ var navControllerGlobal: NavHostController? = null
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-    val currentRoute = navController.currentBackStackEntryFlow
+    val currentRouteMain = navController.currentBackStackEntryFlow
         .collectAsState(initial = navController.currentBackStackEntry)
     val openDialog = remember { mutableStateOf(false) }
 
     navControllerGlobal = navController
 
     Scaffold(
+
         topBar = {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
+
+            if (when (currentRouteMain.value?.destination?.route) {
+                    "competitions", "teams", "players" -> true
+                    else -> false
+                }
+            )
             TopAppBar(
                 title = {
                     when (currentRoute) {
@@ -71,17 +78,17 @@ fun MainScreen() {
             )
         },
         floatingActionButton = {
-            if (when (currentRoute.value?.destination?.route) {
+            if (when (currentRouteMain.value?.destination?.route) {
                     "competitions", "teams", "players" -> true
                     else -> false
                 }
             ) {
                 FloatingActionButton(
                     onClick = {
-                        when (currentRoute.value?.destination?.route) {
+                        when (currentRouteMain.value?.destination?.route) {
                             //Overlay öffnen
                             "competitions" -> {
-                                navController.navigate("competitionDetail")
+                                navController.navigate("competition/new")
                             }
                             "teams" -> {
                                 openDialog.value = true
@@ -102,7 +109,7 @@ fun MainScreen() {
             }
         },
         bottomBar = {
-            if (when (currentRoute.value?.destination?.route) {
+            if (when (currentRouteMain.value?.destination?.route) {
                     "competitions", "teams", "players" -> true
                     else -> false
                 }

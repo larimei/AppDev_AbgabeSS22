@@ -3,4 +3,6 @@
     <string name="players_title_navigation">Spieler</string>
     <string name="teams_title_navigation">Teams</string>
     <string name="competitions_title_navigation">Turniere</string>
+    <string name="info_title_navigation">Information</string>
+    <string name="rounds_title_navigation">Runden</string>
 </resources>

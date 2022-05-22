@@ -42,8 +42,7 @@ class Competition private constructor(
             mode: String,
             rounds: List<String>,
             color: Color
-        ): Competition? {
-            if (name.isBlank()) return null
+        ): Competition {
             val now = ZonedDateTime.now()
             return Competition(id, name, teams, mode, rounds, icon, color, now, now, now)
         }
