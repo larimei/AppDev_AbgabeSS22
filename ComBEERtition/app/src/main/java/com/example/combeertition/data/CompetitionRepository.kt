@@ -10,15 +10,6 @@ val competitionRepository = CompetitionRepository()
 class CompetitionRepository {
     private var allCompetitions = listOfNotNull(
         Competition.create(
-            id = CompetitionId("ac"),
-            name = "Competition 1",
-            teams = listOf("a"),
-            mode="",
-            rounds = emptyList(),
-            icon = R.drawable.ic_competition,
-            color = Color.Magenta
-        ),
-        Competition.create(
             id = CompetitionId("bc"),
             name = "Competition 2",
             teams = emptyList(),

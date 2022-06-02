@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.combeertition.domain.DeleteCompetitionUseCase
-import com.example.combeertition.domain.GetCompetitionsUseCase
+import com.example.combeertition.domain.competition.DeleteCompetitionUseCase
+import com.example.combeertition.domain.competition.GetCompetitionsUseCase
 import com.example.combeertition.domain.model.CompetitionId
 import com.example.combeertition.feature.competition.CompetitionUI
 

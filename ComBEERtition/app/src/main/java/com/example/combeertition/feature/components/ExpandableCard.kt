@@ -15,13 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
-import com.example.combeertition.feature.competitions.detail.ExpandableCardModel
 import com.example.combeertition.R
+import com.example.combeertition.data.ExpandableCardModel
+import com.example.combeertition.domain.model.Round
+import com.example.combeertition.domain.model.Team
+import com.example.combeertition.domain.model.TeamId
 import com.example.combeertition.ui.theme.RsGrey
 import com.example.combeertition.ui.theme.RsYellow
 import org.intellij.lang.annotations.JdkConstants
@@ -32,6 +33,7 @@ fun ExpandableCard(
     round: ExpandableCardModel,
     onCardArrowClick: () -> Unit,
     expanded: Boolean,
+    onGetTeamById: (teamId: TeamId) -> Team?
 ) {
 
     val transitionState = remember {
@@ -87,9 +89,16 @@ fun ExpandableCard(
                     degrees = arrowRotationDegree,
                     onClick = onCardArrowClick
                 )
-                CardTitle(title = round.title)
+                round.round?.round?.let { CardTitle(title = it) }
             }
-            ExpandableContent(visible = expanded, initialVisibility = expanded)
+            round.round?.let {
+                ExpandableContent(
+                    visible = expanded,
+                    initialVisibility = expanded,
+                    round = it,
+                    onGetTeamById
+                )
+            }
         }
 
     }
@@ -129,8 +138,12 @@ fun CardArrow(
 @Composable
 fun ExpandableContent(
     visible: Boolean = true,
-    initialVisibility: Boolean = false
+    initialVisibility: Boolean = false,
+    round: Round,
+    onGetTeamById: (teamId: TeamId) -> Team?
 ) {
+    val firstTeam = onGetTeamById(TeamId(round.firstTeam))
+    val secondTeam = onGetTeamById(TeamId(round.secondTeam))
     val enterFadeIn = remember {
         fadeIn(
             animationSpec = TweenSpec(
@@ -175,8 +188,8 @@ fun ExpandableContent(
                         bottom = 12.dp
                     )
             ) {
-                Text(text = "Team 1")
-                Text(text = "Team 2")
+                firstTeam?.name?.let { Text(text = it) }
+                secondTeam?.name?.let { Text(text = it) }
             }
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -204,7 +217,7 @@ fun ExpandableContent(
                         onClick = { },
                         content = {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_baseline_exposure_plus_1_24),
+                                painter = painterResource(id = R.drawable.ic_baseline_add_24),
                                 contentDescription = "Expandable Arrow",
                                 tint = Color.Black
                             )
@@ -233,7 +246,7 @@ fun ExpandableContent(
                         onClick = { },
                         content = {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_baseline_exposure_plus_1_24),
+                                painter = painterResource(id = R.drawable.ic_baseline_add_24),
                                 contentDescription = "Expandable Arrow",
                                 tint = Color.Black
                             )

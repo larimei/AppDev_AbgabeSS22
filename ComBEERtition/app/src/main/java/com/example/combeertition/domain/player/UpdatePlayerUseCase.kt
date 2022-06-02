@@ -1,4 +1,4 @@
-package com.example.combeertition.domain
+package com.example.combeertition.domain.player
 
 import androidx.compose.ui.graphics.Color
 import com.example.combeertition.R

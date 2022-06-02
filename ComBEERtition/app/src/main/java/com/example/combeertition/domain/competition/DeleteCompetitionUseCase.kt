@@ -1,4 +1,4 @@
-package com.example.combeertition.domain
+package com.example.combeertition.domain.competition
 
 import com.example.combeertition.data.competitionRepository
 import com.example.combeertition.domain.model.CompetitionId

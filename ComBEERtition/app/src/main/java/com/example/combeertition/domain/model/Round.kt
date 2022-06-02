@@ -14,6 +14,8 @@ class Round private constructor(
     val secondTeam: String,
     val winner: String?,
     val loser: String?,
+    val pointsFirst: Int,
+    val pointsSecond: Int,
     val created: ZonedDateTime,
     val updated: ZonedDateTime,
     val deleted: ZonedDateTime,
@@ -40,9 +42,11 @@ class Round private constructor(
             secondTeam: String,
             winner: String?,
             loser: String?,
+            pointsFirst: Int,
+            pointsSecond: Int
         ): Round {
             val now = ZonedDateTime.now()
-            return Round(id, round, firstTeam, secondTeam, winner, loser, now, now, now)
+            return Round(id, round, firstTeam, secondTeam, winner, loser, pointsFirst, pointsSecond, now, now, now)
         }
     }
 }

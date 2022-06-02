@@ -2,8 +2,8 @@ package com.example.combeertition.feature.player.detail
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
-import com.example.combeertition.domain.AddPlayerUseCase
-import com.example.combeertition.domain.UpdatePlayerUseCase
+import com.example.combeertition.domain.player.AddPlayerUseCase
+import com.example.combeertition.domain.player.UpdatePlayerUseCase
 import com.example.combeertition.domain.model.Player
 import com.example.combeertition.domain.model.PlayerId
 import com.example.combeertition.feature.main.ui.navControllerGlobal

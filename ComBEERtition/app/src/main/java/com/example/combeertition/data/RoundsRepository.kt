@@ -1,5 +1,6 @@
 package com.example.combeertition.data
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import com.example.combeertition.R
 import com.example.combeertition.domain.model.Competition
@@ -7,7 +8,11 @@ import com.example.combeertition.domain.model.CompetitionId
 import com.example.combeertition.domain.model.Round
 import com.example.combeertition.domain.model.RoundId
 
-val roundsRepository = CompetitionRepository()
+
+@Immutable
+data class ExpandableCardModel(val id: Int, val round: Round?)
+
+val roundsRepository = RoundsRepository()
 
 class RoundsRepository {
     private var allRounds = listOfNotNull(
@@ -17,7 +22,9 @@ class RoundsRepository {
             firstTeam = "a",
             secondTeam = "b",
             winner = null,
-            loser = null
+            loser = null,
+            pointsFirst = 0,
+            pointsSecond = 0
         )
     )
 
@@ -28,7 +35,14 @@ class RoundsRepository {
     }
 
     fun updateRounds(newRounds: List<Round>): List<Round> {
-        allRounds = newRounds
+        for (round in newRounds) {
+            if (allRounds.find { it.id == round.id } != null) {
+                allRounds = allRounds.map { if (it.id == round.id) round else it }
+            }
+            else {
+                allRounds = allRounds.plus(round)
+            }
+        }
         return getAllRounds()
     }
 

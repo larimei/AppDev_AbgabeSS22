@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.combeertition.domain.DeleteTeamUseCase
-import com.example.combeertition.domain.GetTeamsUseCase
+import com.example.combeertition.domain.team.DeleteTeamUseCase
+import com.example.combeertition.domain.team.GetTeamsUseCase
 import com.example.combeertition.domain.model.TeamId
 
 

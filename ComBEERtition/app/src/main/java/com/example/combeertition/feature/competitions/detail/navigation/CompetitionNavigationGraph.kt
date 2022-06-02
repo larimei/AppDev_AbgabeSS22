@@ -15,7 +15,7 @@ fun CompetitionNavigationGraph(navController: NavHostController, competitionId: 
             CompetitionInformationScreen(competitionId)
         }
         composable(BottomCompetitionNavigationItemApp.Rounds.routeName) {
-            CompetitionRoundsScreen()
+            CompetitionRoundsScreen(competitionId)
         }
 
     }

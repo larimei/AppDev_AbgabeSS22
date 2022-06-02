@@ -1,4 +1,4 @@
-package com.example.combeertition.domain
+package com.example.combeertition.domain.team
 
 import com.example.combeertition.data.teamRepository
 import com.example.combeertition.domain.model.TeamId

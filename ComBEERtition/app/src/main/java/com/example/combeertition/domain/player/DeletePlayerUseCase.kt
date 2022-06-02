@@ -1,4 +1,4 @@
-package com.example.combeertition.domain
+package com.example.combeertition.domain.player
 
 import com.example.combeertition.data.playerRepository
 import com.example.combeertition.domain.model.PlayerId
