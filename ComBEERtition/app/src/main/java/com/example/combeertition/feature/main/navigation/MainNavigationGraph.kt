@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.combeertition.feature.competitions.detail.CompetitionDetailScreen
 import com.example.combeertition.feature.competitions.CompetitionsScreen
+import com.example.combeertition.feature.main.ui.LoadingScreen
 import com.example.combeertition.feature.player.PlayersScreen
 import com.example.combeertition.feature.player.detail.PlayerDetailScreen
 import com.example.combeertition.feature.teams.TeamsScreen
@@ -13,7 +14,7 @@ import com.example.combeertition.feature.teams.detail.TeamDetailScreen
 
 @Composable
 fun MainNavigationGraph(navController: NavHostController) {
-    NavHost(navController, startDestination = "competitions") {
+    NavHost(navController, startDestination = "loading") {
         composable(BottomNavigationItemApp.Competitions.routeName) {
             CompetitionsScreen()
         }
@@ -33,5 +34,7 @@ fun MainNavigationGraph(navController: NavHostController) {
             backStackEntry.arguments?.getString("competitionId")
                 ?.let { CompetitionDetailScreen(it) }
         }
+        composable("loading") { LoadingScreen(navController) }
     }
 }
+

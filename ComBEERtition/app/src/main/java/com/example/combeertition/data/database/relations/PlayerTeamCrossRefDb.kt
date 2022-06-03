@@ -1,4 +1,4 @@
-package com.example.combeertition.data.database.player_team_cross
+package com.example.combeertition.data.database.relations
 
 import androidx.room.Entity
 

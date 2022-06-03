@@ -4,7 +4,7 @@ import androidx.room.*
 import java.time.ZonedDateTime
 
 @Entity(tableName = "player")
-data class PlayerDB(
+data class PlayerDb(
     @PrimaryKey
     val playerId: String,
     val name: String,
@@ -14,13 +14,3 @@ data class PlayerDB(
     val updated: ZonedDateTime,
     val deleted: ZonedDateTime
 )
-
-/*data class PlayerTeamRelation(
-    @Embedded val player: PlayerDB,
-    @Relation(
-        parentColumn = "playerId",
-        entityColumn = "teamId",
-        associateBy = Junction(PlayerTeamCrossRefDb::class)
-    )
-    val teams: List<TeamDb>
-)*/

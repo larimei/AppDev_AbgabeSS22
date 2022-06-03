@@ -21,12 +21,13 @@ import com.example.combeertition.feature.competitions.detail.navigation.Competit
 import com.example.combeertition.feature.main.navigation.BottomNavigationItemApp
 import com.example.combeertition.feature.main.navigation.MainBottomNavigation
 import com.example.combeertition.feature.main.navigation.MainNavigationGraph
+import com.example.combeertition.feature.main.ui.navControllerGlobal
 import com.example.combeertition.feature.teams.detail.AddTeamsOverlay
 
 @Composable
 fun CompetitionDetailScreen(competitionId: String) {
     val navController = rememberNavController()
-    val currentRoute = navController.currentBackStackEntryFlow
+    val currentRouteMain = navController.currentBackStackEntryFlow
         .collectAsState(initial = navController.currentBackStackEntry)
 
     Scaffold(
@@ -50,7 +51,14 @@ fun CompetitionDetailScreen(competitionId: String) {
                 },
                 navigationIcon =
                 {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = {
+                        if (currentRouteMain.value?.destination?.route == "info") {
+                            navControllerGlobal?.navigate("competitions")
+                        } else {
+                            println("jo")
+                            navController?.navigateUp()
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Back"

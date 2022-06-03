@@ -30,6 +30,7 @@ class TeamDetailViewModel: ViewModel() {
     fun onAddTeams(count: Int, players: List<String>, random: Boolean) {
         viewModelScope.launch {
             AddTeamsUseCase()(count, players, random)
+            navControllerGlobal?.navigate("teams")
         }
     }
 

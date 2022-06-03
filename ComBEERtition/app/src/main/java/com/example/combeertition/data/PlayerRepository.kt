@@ -3,7 +3,7 @@ package com.example.combeertition.data
 import androidx.compose.ui.graphics.Color
 import com.example.combeertition.App
 import com.example.combeertition.R
-import com.example.combeertition.data.database.player.PlayerDAO
+import com.example.combeertition.data.database.player.PlayerDao
 import com.example.combeertition.domain.model.Player
 import com.example.combeertition.domain.model.PlayerId
 import com.example.combeertition.data.database.player.playerFromDb
@@ -13,7 +13,7 @@ import com.example.combeertition.data.database.player.playerToDb
 val playerRepository = PlayerRepository(App.database.playerDao())
 
 class PlayerRepository
-    (private val dao: PlayerDAO) {
+    (private val dao: PlayerDao) {
     private var allPlayers = listOfNotNull(
         Player.create(
             id = PlayerId("a"),

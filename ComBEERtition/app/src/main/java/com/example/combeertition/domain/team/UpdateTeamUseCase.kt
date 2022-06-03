@@ -19,7 +19,7 @@ class UpdateTeamUseCase {
         players: List<String>
     ) = withContext(Dispatchers.Default)
     {
-        teamRepository.updateTeam(Team.create(teamId, name, R.drawable.ic_player, color, players))
+        teamRepository.updateTeam(Team.create(teamId, name, R.drawable.ic_team, color, players))
     }
 
 }

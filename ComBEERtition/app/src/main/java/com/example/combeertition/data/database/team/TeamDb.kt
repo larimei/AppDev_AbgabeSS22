@@ -1,8 +1,8 @@
 package com.example.combeertition.data.database.team
 
 import androidx.room.*
-import com.example.combeertition.data.database.player.PlayerDB
-import com.example.combeertition.data.database.player_team_cross.PlayerTeamCrossRefDb
+import com.example.combeertition.data.database.player.PlayerDb
+import com.example.combeertition.data.database.relations.PlayerTeamCrossRefDb
 import java.time.ZonedDateTime
 
 @Entity(tableName = "team")
@@ -24,5 +24,5 @@ data class TeamPlayerRelation(
         entityColumn = "playerId",
         associateBy = Junction(PlayerTeamCrossRefDb::class)
     )
-    val players: List<PlayerDB>
+    val players: List<PlayerDb>
 )

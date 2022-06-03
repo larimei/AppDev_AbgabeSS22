@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.toArgb
 import com.example.combeertition.domain.model.Player
 import com.example.combeertition.domain.model.PlayerId
 
-fun playerToDb(player: Player): PlayerDB = PlayerDB(
+fun playerToDb(player: Player): PlayerDb = PlayerDb(
     playerId = player.id.value,
     name = player.name,
     icon = player.icon,
@@ -15,7 +15,7 @@ fun playerToDb(player: Player): PlayerDB = PlayerDB(
     deleted = player.deleted,
 )
 
-fun playerFromDb(player: PlayerDB): Player? {
+fun playerFromDb(player: PlayerDb): Player? {
     return Player.create(
         id = PlayerId(player.playerId),
         name = player.name,
