@@ -6,10 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.combeertition.data.ExpandableCardModel
 import com.example.combeertition.domain.competition.AddCompetitionUseCase
-import com.example.combeertition.domain.model.CompetitionId
-import com.example.combeertition.domain.model.Round
-import com.example.combeertition.domain.model.Team
-import com.example.combeertition.domain.model.TeamId
+import com.example.combeertition.domain.model.*
+import com.example.combeertition.domain.rounds.EditRoundUseCase
 import com.example.combeertition.domain.rounds.GetRoundsAsCardsUseCase
 import com.example.combeertition.domain.team.GetTeamByIdUseCase
 import com.example.combeertition.feature.main.ui.navControllerGlobal
@@ -38,7 +36,7 @@ class CompetitionRoundsViewModel : ViewModel() {
         }
     }
 
-    fun onGetTeamById(teamId: TeamId): Team? {
-        return GetTeamByIdUseCase()(teamId)
+    fun onEditRound(roundId: RoundId, pointsFirst: Int, pointsSecond: Int) {
+        EditRoundUseCase()(roundId, pointsFirst, pointsSecond)
     }
 }

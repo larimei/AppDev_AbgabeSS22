@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.combeertition.data.roundsRepository
 import com.example.combeertition.domain.model.Round
 import com.example.combeertition.domain.model.RoundId
+import java.lang.Math.sqrt
 import java.util.*
 import kotlin.random.Random
 
@@ -33,6 +34,12 @@ class CreateRoundsUseCase {
             }
             list = list.sortedBy { it.round.toInt() }
             roundsRepository.updateRounds(list)
+        } else if (mode == "Knockout") {
+            var final = 1
+            while (final < teams.count())
+                final *= 2
+            val free = final - teams.count()
+            val matches = listOf(1..kotlin.math.sqrt(final.toDouble()).toInt())
         }
         return list.map { it -> it.id.value }
     }

@@ -1,15 +1,14 @@
 package com.example.combeertition.domain.team
 
+import com.example.combeertition.data.playerRepository
 import com.example.combeertition.data.teamRepository
+import com.example.combeertition.domain.model.Team
 import com.example.combeertition.domain.model.TeamId
 
 class DeleteTeamUseCase {
 
-    operator fun invoke(teamId: TeamId): Boolean {
-        val team = teamRepository.getTeamById(teamId) ?: return false
-
-        val updatedTeams = teamRepository.getAllTeams().filter{it != team}
-        teamRepository.updateTeams(updatedTeams)
+    suspend operator fun invoke(team: Team): Boolean {
+        teamRepository.deleteTeam(team)
         return true
     }
 }

@@ -5,7 +5,7 @@ import com.example.combeertition.domain.model.Team
 import com.example.combeertition.domain.model.TeamId
 
 class GetTeamByIdUseCase {
-    operator fun invoke(teamId: TeamId): Team? {
+    suspend operator fun invoke(teamId: TeamId): Team? {
         return teamRepository.getTeamById(teamId)
     }
 }

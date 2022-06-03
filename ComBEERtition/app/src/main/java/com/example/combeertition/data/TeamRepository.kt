@@ -1,13 +1,21 @@
 package com.example.combeertition.data
 
 import androidx.compose.ui.graphics.Color
+import com.example.combeertition.App
 import com.example.combeertition.R
+import com.example.combeertition.data.database.team.teamFromDb
+import com.example.combeertition.data.database.player.playerFromDb
+import com.example.combeertition.data.database.player.playerToDb
+import com.example.combeertition.data.database.team.TeamDao
+import com.example.combeertition.data.database.team.teamToDb
+import com.example.combeertition.domain.model.Player
+import com.example.combeertition.domain.model.PlayerId
 import com.example.combeertition.domain.model.Team
 import com.example.combeertition.domain.model.TeamId
 
-val teamRepository = TeamRepository()
+val teamRepository = TeamRepository(App.database.teamDao())
 
-class TeamRepository {
+class TeamRepository (private val dao: TeamDao) {
     private var allTeams = listOfNotNull(
         Team.create(
             id = TeamId("at"),
@@ -53,15 +61,21 @@ class TeamRepository {
         ),
     )
 
-    fun getAllTeams() = allTeams
 
-    fun getTeamById(id: TeamId): Team? = allTeams.firstOrNull {
-        it.id == id
+    suspend fun getAllTeams(): List<Team> = dao.getAll().mapNotNull { teamFromDb(it) }
+
+    suspend fun getTeamById(id: TeamId): Team? =
+        dao.getById(id.value)?.let { teamFromDb(it) }
+
+    suspend fun addTeam(team: Team) {
+        dao.insert(teamToDb(team))
     }
 
-    fun updateTeams(newTeams: List<Team>): List<Team> {
-        allTeams = newTeams
-        return getAllTeams()
+    suspend fun deleteTeam(team: Team) {
+        dao.delete(teamToDb(team))
     }
 
+    suspend fun updateTeam(team: Team) {
+        dao.update(teamToDb(team))
+    }
 }

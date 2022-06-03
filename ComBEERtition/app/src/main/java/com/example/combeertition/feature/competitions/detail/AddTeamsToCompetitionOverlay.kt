@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -24,20 +26,29 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.combeertition.R
 import com.example.combeertition.data.playerRepository
 import com.example.combeertition.data.teamRepository
+import com.example.combeertition.domain.model.Team
 import com.example.combeertition.feature.player.detail.createPlayer
+import com.example.combeertition.feature.teams.TeamUI
+import com.example.combeertition.feature.teams.TeamsViewModel
+import com.example.combeertition.feature.teams.detail.TeamDetailViewModel
 
 @Composable
 fun AddTeamsToCompetitionOverlay(
     openDialog: MutableState<Boolean>,
-    teams: MutableState<List<String>>
+    teams: MutableState<List<String>>,
+    viewModel: TeamsViewModel = viewModel(),
 ) {
-    AddTeamsToCompetitionOverlayUi(openDialog, teams)
+    val teamsList by viewModel.bindUI(LocalContext.current).observeAsState(
+        (emptyList())
+    )
+    AddTeamsToCompetitionOverlayUi(openDialog, teams,teamsList)
 }
 
 @Composable
 fun AddTeamsToCompetitionOverlayUi(
     openDialog: MutableState<Boolean>,
-    teams: MutableState<List<String>>
+    teams: MutableState<List<String>>,
+    teamsList: List<TeamUI>
 ) {
     val teamsOverlay: MutableState<List<String>> = remember { mutableStateOf(teams.value) }
 
@@ -58,7 +69,7 @@ fun AddTeamsToCompetitionOverlayUi(
                     .height(500.dp)
             ) {
                 LazyColumn() {
-                    items(teamRepository.getAllTeams()) { team ->
+                    items(teamsList) { team ->
                         Row(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically,

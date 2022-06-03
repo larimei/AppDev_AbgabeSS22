@@ -1,5 +1,6 @@
 package com.example.combeertition.feature.teams.detail
 
+import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,93 +27,108 @@ import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import java.util.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.LiveData
+import com.example.combeertition.feature.player.detail.PlayerDetailViewModel
 
 @Composable
-fun TeamDetailScreen(teamIdString: String, viewModel: TeamDetailViewModel = viewModel()) {
-    TeamDetailScreenUI(teamIdString, viewModel::onUpdateTeam)
+fun TeamDetailScreen(
+    teamIdString: String,
+    viewModel: TeamDetailViewModel = viewModel(),
+    viewModelPlayer: PlayerDetailViewModel = viewModel()
+) {
+    val team by viewModel.bindUI(LocalContext.current, TeamId(teamIdString)).observeAsState()
+    TeamDetailScreenUI(viewModel::onUpdateTeam, viewModelPlayer::bindUI, team)
 }
 
 
 @Composable
 fun TeamDetailScreenUI(
-    teamIdString: String?,
-    onUpdateTeam: (teamId: TeamId, name: String, color: Color, players: List<String>) -> Unit
+    onUpdateTeam: (teamId: TeamId, name: String, color: Color, players: List<String>) -> Unit,
+    onGetPlayerById: (context: Context, playerId: PlayerId) -> LiveData<Player?>,
+    team: Team?
 ) {
-    var teamId = TeamId(teamIdString ?: "new")
-    val team = teamRepository.getTeamById(teamId)
+    if (team != null) {
+        var name by remember { mutableStateOf(team.name) }
+        var color by remember { mutableStateOf(team.color) }
+        var players by remember { mutableStateOf(team.players) }
 
-    var name by remember { mutableStateOf(team?.name ?: "") }
-    var color by remember { mutableStateOf(team?.color ?: Color.Black) }
-    var players by remember { mutableStateOf(team?.players ?: emptyList()) }
+        val controller = rememberColorPickerController()
+        var set = false
 
-    val controller = rememberColorPickerController()
-    var set = false
-
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Icon(
-            painter = painterResource(team?.icon ?: R.drawable.ic_team),
-            contentDescription = name,
-            modifier = Modifier
-                .size(200.dp)
-                .padding(horizontal = 40.dp),
-            tint = color
-        )
-        OutlinedTextField(
-            label = {
-                Text(
-                    text = "Teamname/Motto",
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            },
-            value = name,
-            onValueChange = { name = it },
-            modifier = Modifier
-                .padding(horizontal = 40.dp)
-                .fillMaxWidth()
-        )
-        HsvColorPicker(
-            modifier = Modifier
-                .width(250.dp)
-                .height(250.dp)
-                .padding(40.dp),
-            controller = controller,
-            onColorChanged = { colorEnvelope: ColorEnvelope ->
-                if (set)
-                    color = colorEnvelope.color
-                else set = true
-            }
-        )
-        //TODO schöner anordnen
-        LazyColumn() {
-            items(team?.players ?: emptyList()) { player ->
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = playerRepository.getPlayerById(PlayerId(player))?.name ?: "")
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(
+                painter = painterResource(team.icon),
+                contentDescription = name,
+                modifier = Modifier
+                    .size(200.dp)
+                    .padding(horizontal = 40.dp),
+                tint = color
+            )
+            OutlinedTextField(
+                label = {
+                    Text(
+                        text = "Teamname/Motto",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                },
+                value = name,
+                onValueChange = { name = it },
+                modifier = Modifier
+                    .padding(horizontal = 40.dp)
+                    .fillMaxWidth()
+            )
+            HsvColorPicker(
+                modifier = Modifier
+                    .width(250.dp)
+                    .height(250.dp)
+                    .padding(40.dp),
+                controller = controller,
+                onColorChanged = { colorEnvelope: ColorEnvelope ->
+                    if (set)
+                        color = colorEnvelope.color
+                    else set = true
+                }
+            )
+            //TODO schöner anordnen
+            LazyColumn() {
+                items(team.players) { player ->
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        val player by onGetPlayerById(
+                            LocalContext.current,
+                            PlayerId(player)
+                        ).observeAsState()
+                        Text(text = player?.name ?: "")
+                    }
                 }
             }
-        }
-        Button(onClick = {
-            onUpdateTeam(teamId, name, color, players)
-        }, modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 40.dp)) {
-            Row() {
-                Icon(
-                    painterResource(R.drawable.ic_baseline_save_24),
-                    contentDescription = "add team",
-                    tint = Color.White,
-                    modifier = Modifier.padding(horizontal = 4.dp)
-                )
-                Text(
-                    text = (if (teamId == null) "Hinzufügen" else "Speichern"),
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
+            Button(
+                onClick = {
+                    onUpdateTeam(team.id, name, color, players)
+                }, modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 40.dp)
+            ) {
+                Row() {
+                    Icon(
+                        painterResource(R.drawable.ic_baseline_save_24),
+                        contentDescription = "add team",
+                        tint = Color.White,
+                        modifier = Modifier.padding(horizontal = 4.dp)
+                    )
+                    Text(
+                        text = "Speichern",
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
         }
     }

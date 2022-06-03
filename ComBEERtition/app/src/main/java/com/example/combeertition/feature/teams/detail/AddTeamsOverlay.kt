@@ -16,27 +16,37 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.combeertition.R
 import com.example.combeertition.data.playerRepository
+import com.example.combeertition.domain.model.Player
+import com.example.combeertition.feature.player.PlayerUI
+import com.example.combeertition.feature.player.PlayersViewModel
 import com.example.combeertition.feature.player.detail.createPlayer
 
 @Composable
 fun AddTeamsOverlay(
     openDialog: MutableState<Boolean>,
-    viewModel: TeamDetailViewModel = viewModel()
+    viewModel: TeamDetailViewModel = viewModel(),
+    viewModelPlayer: PlayersViewModel = viewModel()
 ) {
-    AddTeamsOverlayUi(openDialog, viewModel::onAddTeams)
+    val players by viewModelPlayer.bindUI(LocalContext.current).observeAsState(
+        (emptyList())
+    )
+    AddTeamsOverlayUi(openDialog, viewModel::onAddTeams, players)
 }
 
 @Composable
 fun AddTeamsOverlayUi(
     openDialog: MutableState<Boolean>,
-    onAddTeams: (count: Int, players: List<String>, random: Boolean) -> Unit
+    onAddTeams: (count: Int, players: List<String>, random: Boolean) -> Unit,
+    playersList: List<PlayerUI>
 ) {
     var expanded by remember { mutableStateOf(false) }
     val items = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15).map { it.toString() }
@@ -112,7 +122,7 @@ fun AddTeamsOverlayUi(
                     if (checkedState.value) {
                         Box(modifier = Modifier.height(300.dp)) {
                             LazyColumn() {
-                                items(playerRepository.getAllPlayers()) { player ->
+                                items(playersList) { player ->
                                     Row(
                                         horizontalArrangement = Arrangement.SpaceBetween,
                                         verticalAlignment = Alignment.CenterVertically,

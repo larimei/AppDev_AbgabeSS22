@@ -1,13 +1,19 @@
 package com.example.combeertition.data
 
 import androidx.compose.ui.graphics.Color
+import com.example.combeertition.App
 import com.example.combeertition.R
+import com.example.combeertition.data.database.player.PlayerDAO
 import com.example.combeertition.domain.model.Player
 import com.example.combeertition.domain.model.PlayerId
+import com.example.combeertition.data.database.player.playerFromDb
+import com.example.combeertition.data.database.player.playerToDb
 
-val playerRepository = PlayerRepository()
 
-class PlayerRepository {
+val playerRepository = PlayerRepository(App.database.playerDao())
+
+class PlayerRepository
+    (private val dao: PlayerDAO) {
     private var allPlayers = listOfNotNull(
         Player.create(
             id = PlayerId("a"),
@@ -47,16 +53,22 @@ class PlayerRepository {
         ),
     )
 
-    fun getAllPlayers() = allPlayers
+    suspend fun getAllPlayers(): List<Player> = dao.getAll().mapNotNull { playerFromDb(it) }
 
-    fun getPlayerById(id: PlayerId): Player? = allPlayers.firstOrNull {
-        it.id == id
+    suspend fun getPlayerById(id: PlayerId): Player? =
+        dao.getById(id.value)?.let { playerFromDb(it) }
+
+    suspend fun addPlayer(player: Player) {
+        dao.insert(playerToDb(player))
     }
 
-
-    fun updatePlayers(newPlayers: List<Player>): List<Player> {
-        allPlayers = newPlayers
-        return getAllPlayers()
+    suspend fun deletePlayer(player: Player) {
+        dao.delete(playerToDb(player))
     }
+
+    suspend fun updatePlayer(player: Player) {
+        dao.update(playerToDb(player))
+    }
+
 
 }

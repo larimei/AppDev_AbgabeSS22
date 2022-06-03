@@ -39,43 +39,42 @@ fun MainScreen() {
             val currentRoute = navBackStackEntry?.destination?.route
 
             if (when (currentRouteMain.value?.destination?.route) {
-                    "competitions", "teams", "players" -> true
+                    "competitions", "teams", "team/{teamId}", "players", "player/{playerId}" -> true
                     else -> false
                 }
             )
-            TopAppBar(
-                title = {
-                    when (currentRoute) {
-                        BottomNavigationItemApp.Competitions.routeName -> Text(
-                            stringResource(
-                                BottomNavigationItemApp.Competitions.title
+                TopAppBar(
+                    title = {
+                        when (currentRoute) {
+                            BottomNavigationItemApp.Competitions.routeName -> Text(
+                                stringResource(
+                                    BottomNavigationItemApp.Competitions.title
+                                )
                             )
-                        )
-                        BottomNavigationItemApp.Teams.routeName -> Text(
-                            stringResource(
-                                BottomNavigationItemApp.Teams.title
+                            BottomNavigationItemApp.Teams.routeName -> Text(
+                                stringResource(
+                                    BottomNavigationItemApp.Teams.title
+                                )
                             )
-                        )
-                        BottomNavigationItemApp.Players.routeName -> Text(
-                            stringResource(
-                                BottomNavigationItemApp.Players.title
+                            BottomNavigationItemApp.Players.routeName -> Text(
+                                stringResource(
+                                    BottomNavigationItemApp.Players.title
+                                )
                             )
-                        )
-                        "playerDetail" -> Text("Spieler")
-                        "teamDetail" -> Text("Team")
-                        "competitionDetail" -> Text("Turnier")
+                            "player/{playerId}" -> Text("Spieler")
+                            "team/{teamId}" -> Text("Team")
+                        }
+                    },
+                    navigationIcon =
+                    {
+                        IconButton(onClick = { navController.navigateUp() }) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowBack,
+                                contentDescription = "Back"
+                            )
+                        }
                     }
-                },
-                navigationIcon =
-                {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                }
-            )
+                )
         },
         floatingActionButton = {
             if (when (currentRouteMain.value?.destination?.route) {

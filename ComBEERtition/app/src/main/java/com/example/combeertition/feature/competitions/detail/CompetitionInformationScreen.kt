@@ -1,5 +1,6 @@
 package com.example.combeertition.feature.competitions.detail
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.rememberScrollableState
@@ -12,24 +13,25 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.combeertition.domain.model.Competition
 import com.example.combeertition.R
 import com.example.combeertition.data.competitionRepository
 import com.example.combeertition.data.playerRepository
 import com.example.combeertition.data.teamRepository
-import com.example.combeertition.domain.model.CompetitionId
-import com.example.combeertition.domain.model.PlayerId
-import com.example.combeertition.domain.model.TeamId
+import com.example.combeertition.domain.model.*
 import com.example.combeertition.feature.teams.detail.AddTeamsOverlay
+import com.example.combeertition.feature.teams.detail.TeamDetailViewModel
 import com.github.skydoves.colorpicker.compose.ColorEnvelope
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
@@ -38,12 +40,14 @@ import java.util.*
 @Composable
 fun CompetitionInformationScreen(
     competitionIdString: String,
-    viewModel: CompetitionDetailViewModel = viewModel()
+    viewModel: CompetitionDetailViewModel = viewModel(),
+    viewModelTeam: TeamDetailViewModel = viewModel()
 ) {
     CompetitionDetailScreenUI(
         competitionIdString,
         viewModel::onAddCompetition,
-        viewModel::onUpdateCompetition
+        viewModel::onUpdateCompetition,
+        viewModelTeam::bindUI
     )
 }
 
@@ -52,7 +56,8 @@ fun CompetitionInformationScreen(
 fun CompetitionDetailScreenUI(
     competitionIdString: String?,
     onAddCompetition: (competitionId: CompetitionId, name: String, color: Color, teams: List<String>, mode: String) -> Unit,
-    onUpdateCompetition: (CompetitionId: CompetitionId, name: String, color: Color, teams: List<String>, mode: String) -> Unit
+    onUpdateCompetition: (CompetitionId: CompetitionId, name: String, color: Color, teams: List<String>, mode: String) -> Unit,
+    onGetTeamById: (context: Context, teamId: TeamId) -> LiveData<Team?>
 ) {
     var competitionId: CompetitionId? = CompetitionId(competitionIdString ?: "new")
     if (competitionIdString == "new") {
@@ -135,7 +140,8 @@ fun CompetitionDetailScreenUI(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = teamRepository.getTeamById(TeamId(team))?.name ?: "")
+                    val team by onGetTeamById(LocalContext.current, TeamId(team)).observeAsState()
+                    Text(text = team?.name ?: "")
                 }
             }
         }

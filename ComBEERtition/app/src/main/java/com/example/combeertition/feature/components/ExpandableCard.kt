@@ -1,6 +1,7 @@
 package com.example.combeertition.feature.components
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -8,19 +9,21 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
 import com.example.combeertition.R
 import com.example.combeertition.data.ExpandableCardModel
 import com.example.combeertition.domain.model.Round
+import com.example.combeertition.domain.model.RoundId
 import com.example.combeertition.domain.model.Team
 import com.example.combeertition.domain.model.TeamId
 import com.example.combeertition.ui.theme.RsGrey
@@ -33,7 +36,8 @@ fun ExpandableCard(
     round: ExpandableCardModel,
     onCardArrowClick: () -> Unit,
     expanded: Boolean,
-    onGetTeamById: (teamId: TeamId) -> Team?
+    onGetTeamById: (context: Context, teamId: TeamId) -> LiveData<Team?>,
+    onEditRound: (roundId: RoundId, pointsFirst: Int, pointsSecond: Int) -> Unit
 ) {
 
     val transitionState = remember {
@@ -96,7 +100,8 @@ fun ExpandableCard(
                     visible = expanded,
                     initialVisibility = expanded,
                     round = it,
-                    onGetTeamById
+                    onGetTeamById,
+                    onEditRound
                 )
             }
         }
@@ -140,10 +145,15 @@ fun ExpandableContent(
     visible: Boolean = true,
     initialVisibility: Boolean = false,
     round: Round,
-    onGetTeamById: (teamId: TeamId) -> Team?
+    onGetTeamById: (context: Context, teamId: TeamId) -> LiveData<Team?>,
+    onEditRound: (roundId: RoundId, pointsFirst: Int, pointsSecond: Int) -> Unit
 ) {
-    val firstTeam = onGetTeamById(TeamId(round.firstTeam))
-    val secondTeam = onGetTeamById(TeamId(round.secondTeam))
+
+    val firstTeam by onGetTeamById(LocalContext.current, TeamId(round.firstTeam)).observeAsState()
+    val secondTeam by onGetTeamById(LocalContext.current, TeamId(round.secondTeam)).observeAsState()
+    var pointsFirst by remember { mutableStateOf(round.pointsFirst) }
+    var pointsSecond by remember { mutableStateOf(round.pointsSecond) }
+
     val enterFadeIn = remember {
         fadeIn(
             animationSpec = TweenSpec(
@@ -198,7 +208,12 @@ fun ExpandableContent(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(
                         modifier = Modifier.background(RsYellow, CircleShape),
-                        onClick = { },
+                        onClick = {
+                            if (pointsFirst > 0) {
+                                pointsFirst--
+                                onEditRound(round.id, pointsFirst, pointsSecond)
+                            }
+                        },
                         content = {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_baseline_exposure_neg_1_24),
@@ -208,13 +223,18 @@ fun ExpandableContent(
                         }
                     )
                     Text(
-                        text = "1", modifier = Modifier.padding(
+                        text = pointsFirst.toString(), modifier = Modifier.padding(
                             horizontal = 14.dp
                         )
                     )
                     IconButton(
                         modifier = Modifier.background(RsYellow, CircleShape),
-                        onClick = { },
+                        onClick = {
+                            if (pointsFirst < 10) {
+                                pointsFirst++
+                                onEditRound(round.id, pointsFirst, pointsSecond)
+                            }
+                        },
                         content = {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_baseline_add_24),
@@ -227,7 +247,12 @@ fun ExpandableContent(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(
                         modifier = Modifier.background(RsYellow, CircleShape),
-                        onClick = { },
+                        onClick = {
+                            if (pointsSecond > 0) {
+                                pointsSecond--
+                                onEditRound(round.id, pointsFirst, pointsSecond)
+                            }
+                        },
                         content = {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_baseline_exposure_neg_1_24),
@@ -237,13 +262,18 @@ fun ExpandableContent(
                         }
                     )
                     Text(
-                        text = "5", modifier = Modifier.padding(
+                        text = pointsSecond.toString(), modifier = Modifier.padding(
                             horizontal = 14.dp
                         )
                     )
                     IconButton(
                         modifier = Modifier.background(RsYellow, CircleShape),
-                        onClick = { },
+                        onClick = {
+                            if (pointsSecond < 10) {
+                                pointsSecond++
+                                onEditRound(round.id, pointsFirst, pointsSecond)
+                            }
+                        },
                         content = {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_baseline_add_24),
