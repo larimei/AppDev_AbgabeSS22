@@ -18,7 +18,7 @@ fun teamToDb(team: Team): TeamDb = TeamDb(
     deleted = team.deleted,
 )
 
-fun teamFromDb(teamPlayerRelation: TeamPlayerRelation): Team? {
+fun teamFromDb(teamPlayerRelation: TeamWithPlayers): Team? {
     return Team.create(
         id = TeamId(teamPlayerRelation.team.teamId),
         name = teamPlayerRelation.team.name,

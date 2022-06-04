@@ -14,11 +14,12 @@ interface TeamDao {
     @Delete
     suspend fun delete(team: TeamDb)
 
+    @Transaction
     @Query("SELECT * FROM team")
-    suspend fun getAll(): List<TeamPlayerRelation>
+    suspend fun getAll(): List<TeamWithPlayers>
 
+    @Transaction
     @Query("SELECT * FROM team WHERE teamId = :id")
-    suspend fun getById(id: String): TeamPlayerRelation?
+    suspend fun getById(id: String): TeamWithPlayers?
 
-    //TODO realation adden
 }

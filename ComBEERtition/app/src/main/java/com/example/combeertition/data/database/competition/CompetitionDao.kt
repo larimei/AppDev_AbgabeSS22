@@ -14,9 +14,9 @@ interface CompetitionDao {
     suspend fun delete(competition: CompetitionDb)
 
     @Query("SELECT * FROM competition")
-    suspend fun getAll(): List<CompetitionTeamRoundRelation>
+    suspend fun getAll(): List<CompetitionWithTeamsAndRounds>
 
     @Query("SELECT * FROM competition WHERE competitionId = :id")
-    suspend fun getById(id: String): CompetitionTeamRoundRelation?
+    suspend fun getById(id: String): CompetitionWithTeamsAndRounds?
 
 }

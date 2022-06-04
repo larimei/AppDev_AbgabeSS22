@@ -7,7 +7,6 @@ import com.example.combeertition.data.database.competition.CompetitionDao
 import com.example.combeertition.data.database.competition.CompetitionDb
 import com.example.combeertition.data.database.player.PlayerDao
 import com.example.combeertition.data.database.player.PlayerDb
-import com.example.combeertition.data.database.relations.CompetitionRoundCrossRefDb
 import com.example.combeertition.data.database.relations.CompetitionTeamCrossRefDb
 import com.example.combeertition.data.database.relations.teamplayer.TeamPlayerDao
 import com.example.combeertition.data.database.relations.teamplayer.TeamPlayerDb
@@ -17,11 +16,10 @@ import com.example.combeertition.data.database.team.TeamDao
 import com.example.combeertition.data.database.team.TeamDb
 
 @Database(
-    version = 3,
+    version = 6,
     entities = [
         PlayerDb::class,
         TeamDb::class,
-        CompetitionRoundCrossRefDb::class,
         CompetitionTeamCrossRefDb::class,
         CompetitionDb::class,
         RoundDb::class,

@@ -2,9 +2,9 @@ package com.example.combeertition.domain.team
 
 import androidx.compose.ui.graphics.Color
 import com.example.combeertition.R
+import com.example.combeertition.data.teamPlayerRepository
 import com.example.combeertition.data.teamRepository
-import com.example.combeertition.domain.model.Team
-import com.example.combeertition.domain.model.TeamId
+import com.example.combeertition.domain.model.*
 import java.util.*
 import kotlin.random.Random
 
@@ -109,8 +109,6 @@ class AddTeamsUseCase {
                 )
             )
         }
-
-
         while (players.isNotEmpty() && random) {
             for (i in 0 until count) {
                 val randomIndex = Random.nextInt(players.size)
@@ -122,8 +120,18 @@ class AddTeamsUseCase {
 
         for (team in teams) {
             teamRepository.addTeam(team)
+            for (player in team.players) {
+                teamPlayerRepository.addTeamPlayer(
+                    TeamPlayer.create(
+                        TeamPlayerId(
+                            UUID.randomUUID().toString()
+                        ),
+                        team.id,
+                        PlayerId(player)
+                    )
+                )
+            }
         }
-
         return true
     }
 }

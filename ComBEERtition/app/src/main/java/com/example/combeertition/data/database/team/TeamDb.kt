@@ -20,7 +20,7 @@ data class TeamDb(
     val deleted: ZonedDateTime,
 )
 
-data class TeamPlayerRelation(
+data class TeamWithPlayers(
     @Embedded val team: TeamDb,
     @Relation(
         parentColumn = "teamId",

@@ -47,11 +47,13 @@ class TeamDetailViewModel : ViewModel() {
         viewModelScope.launch {
             UpdateTeamUseCase()(teamId, name, color, players, wins, looses, matches)
         }
+        navControllerGlobal?.navigate("team/" + teamId.value)
     }
 
     fun onDeleteTeam(teamId: TeamId) {
         viewModelScope.launch {
             GetTeamByIdUseCase()(teamId)?.let { DeleteTeamUseCase()(it) }
         }
+        navControllerGlobal?.navigate("teams")
     }
 }

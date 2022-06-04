@@ -1,7 +1,6 @@
 package com.example.combeertition.data.database.competition
 
 import androidx.room.*
-import com.example.combeertition.data.database.relations.CompetitionRoundCrossRefDb
 import com.example.combeertition.data.database.relations.CompetitionTeamCrossRefDb
 import com.example.combeertition.data.database.round.RoundDb
 import com.example.combeertition.data.database.team.TeamDb
@@ -21,7 +20,7 @@ data class CompetitionDb(
 )
 
 
-data class CompetitionTeamRelation(
+data class CompetitionWithTeams(
     @Embedded val competition: CompetitionDb,
     @Relation(
         parentColumn = "competitionId",
@@ -31,8 +30,8 @@ data class CompetitionTeamRelation(
     val teams: List<TeamDb>
 )
 
-data class CompetitionTeamRoundRelation(
-    @Embedded val competition: CompetitionTeamRelation,
+data class CompetitionWithTeamsAndRounds(
+    @Embedded val competition: CompetitionWithTeams,
     @Relation(
         parentColumn = "competitionId",
         entityColumn = "roundId",

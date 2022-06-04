@@ -8,7 +8,7 @@ import com.example.combeertition.domain.model.Player
 import com.example.combeertition.domain.model.PlayerId
 import com.example.combeertition.domain.model.TeamPlayer
 
-//val teamPayerRepository = TeamPlayerRepository(App.database.teamPlayerDao())
+val teamPlayerRepository = TeamPlayerRepository(App.database.teamPlayerDao())
 
 class TeamPlayerRepository
     (private val dao: TeamPlayerDao) {

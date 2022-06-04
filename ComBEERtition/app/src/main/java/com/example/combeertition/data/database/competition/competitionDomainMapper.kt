@@ -16,7 +16,7 @@ fun competitionToDb(competition: Competition): CompetitionDb = CompetitionDb(
 )
 
 fun competitionFromDb(
-    competitionTeamRoundRelation: CompetitionTeamRoundRelation,
+    competitionTeamRoundRelation: CompetitionWithTeamsAndRounds,
 ): Competition? {
     return Competition.create(
         id = CompetitionId(competitionTeamRoundRelation.competition.competition.competitionId),

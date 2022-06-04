@@ -3,13 +3,12 @@ package com.example.combeertition.domain.team
 import androidx.compose.ui.graphics.Color
 import com.example.combeertition.R
 import com.example.combeertition.data.playerRepository
+import com.example.combeertition.data.teamPlayerRepository
 import com.example.combeertition.data.teamRepository
-import com.example.combeertition.domain.model.Player
-import com.example.combeertition.domain.model.PlayerId
-import com.example.combeertition.domain.model.Team
-import com.example.combeertition.domain.model.TeamId
+import com.example.combeertition.domain.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.*
 
 class UpdateTeamUseCase {
     suspend operator fun invoke(
@@ -22,7 +21,29 @@ class UpdateTeamUseCase {
         matches: Int
     ) = withContext(Dispatchers.Default)
     {
-        teamRepository.updateTeam(Team.create(teamId, name, R.drawable.ic_team, color, players, wins, looses, matches))
+        for (player in players) {
+            teamPlayerRepository.addTeamPlayer(
+                TeamPlayer.create(
+                    TeamPlayerId(
+                        UUID.randomUUID().toString()
+                    ),
+                    teamId,
+                    PlayerId(player)
+                )
+            )
+        }
+        teamRepository.updateTeam(
+            Team.create(
+                teamId,
+                name,
+                R.drawable.ic_team,
+                color,
+                players,
+                wins,
+                looses,
+                matches
+            )
+        )
     }
 
 }
