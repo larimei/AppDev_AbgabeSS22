@@ -24,11 +24,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.combeertition.R
-import com.example.combeertition.data.playerRepository
-import com.example.combeertition.domain.model.Player
 import com.example.combeertition.feature.player.PlayerUI
 import com.example.combeertition.feature.player.PlayersViewModel
-import com.example.combeertition.feature.player.detail.createPlayer
+
 
 @Composable
 fun AddTeamsOverlay(
@@ -114,7 +112,7 @@ fun AddTeamsOverlayUi(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Spieler zufällig hinzufügen")
-                        Checkbox(
+                        Switch(
                             checked = checkedState.value,
                             onCheckedChange = { checkedState.value = it }
                         )

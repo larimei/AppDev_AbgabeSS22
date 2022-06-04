@@ -9,13 +9,12 @@ import com.example.combeertition.domain.model.RoundId
 import com.example.combeertition.domain.model.Team
 import com.example.combeertition.domain.model.TeamId
 
-class EditRoundUseCase {
-    operator fun invoke(roundId: RoundId, pointsFirst: Int, pointsSecond: Int): Boolean {
+class UpdateRoundUseCase {
+    suspend operator fun invoke(roundId: RoundId, pointsFirst: Int, pointsSecond: Int): Boolean {
         val updatedRound = roundsRepository.getRoundById(roundId)
-        var newRound: List<Round> = emptyList()
 
         if (updatedRound != null) {
-            newRound = newRound.plus(
+            roundsRepository.updateRound(
                 Round.create(
                     roundId,
                     updatedRound.round,
@@ -27,7 +26,6 @@ class EditRoundUseCase {
                     pointsSecond
                 )
             )
-            roundsRepository.updateRounds(newRound)
             return true
         }
         return false

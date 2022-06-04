@@ -1,23 +1,26 @@
 package com.example.combeertition.feature.player
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement.Absolute.Center
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.combeertition.R
 import com.example.combeertition.domain.model.PlayerId
 import com.example.combeertition.feature.main.ui.navControllerGlobal
@@ -26,58 +29,49 @@ import com.example.combeertition.ui.theme.RsRed
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PlayerItem(player: PlayerUI, deletePlayer: (id: PlayerId) -> Unit) {
-    Card(
-        elevation = 3.dp,
-        modifier = Modifier.padding(8.dp),
-        onClick = { navControllerGlobal?.navigate("player/" + player.id.value)}
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+fun PlayerItem(player: PlayerUI) {
+    Box(modifier = Modifier.padding(20.dp)) {
+        Box(modifier = Modifier
+            .size(130.dp)
+            .shadow(10.dp, RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(10.dp))
+            .background(
+                Brush.verticalGradient(
+                    listOf(
+                        player.color,
+                        Color.White
+                    )
+                )
+            )
+            .clickable {
+                navControllerGlobal?.navigate(
+                    "player/" + player.id.value
+                )
+            }
         ) {
-            Icon(
-                painter = painterResource(player.icon),
-                contentDescription = player.name,
-                modifier = Modifier
-                    .size(50.dp)
-                    .padding(end = 8.dp),
-                tint = player.color
-            )
-            Text(
-                text = player.name,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-
-            Box(
-                modifier = Modifier.align(Alignment.CenterVertically),
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth().fillMaxHeight()
             ) {
-                IconButton(
-                    onClick = { deletePlayer(player.id) }
-                ) {
-                    Icon(painterResource(R.drawable.ic_baseline_delete_24),
-                        contentDescription = "delete player",
-                        tint = RsRed)
-                }
+                Icon(
+                    painter = painterResource(player.icon),
+                    contentDescription = player.name,
+                    modifier = Modifier
+                        .size(70.dp)
+                        .padding(8.dp),
+                    tint = Color.Black
+                )
+
+                Text(
+                    text = player.name,
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }
 }
 
-@Preview
-@Composable
-fun PlayerItem_Preview() {
-    PlayerItem(
-        PlayerUI(
-            PlayerId("foo"),
-            "Lara",
-            R.drawable.ic_player,
-            Color.Blue
-        )
-    ) {}
-}
+

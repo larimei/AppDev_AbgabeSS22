@@ -1,16 +1,11 @@
 package com.example.combeertition.feature.competitions.detail
 
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.combeertition.data.ExpandableCardModel
-import com.example.combeertition.domain.competition.AddCompetitionUseCase
 import com.example.combeertition.domain.model.*
-import com.example.combeertition.domain.rounds.EditRoundUseCase
+import com.example.combeertition.domain.rounds.UpdateRoundUseCase
 import com.example.combeertition.domain.rounds.GetRoundsAsCardsUseCase
-import com.example.combeertition.domain.team.GetTeamByIdUseCase
-import com.example.combeertition.feature.main.ui.navControllerGlobal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,6 +32,8 @@ class CompetitionRoundsViewModel : ViewModel() {
     }
 
     fun onEditRound(roundId: RoundId, pointsFirst: Int, pointsSecond: Int) {
-        EditRoundUseCase()(roundId, pointsFirst, pointsSecond)
+        viewModelScope.launch {
+            UpdateRoundUseCase()(roundId, pointsFirst, pointsSecond)
+        }
     }
 }

@@ -1,16 +1,26 @@
 package com.example.combeertition.feature.competitions.detail
 
+import android.content.Context
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.combeertition.domain.competition.AddCompetitionUseCase
+import com.example.combeertition.domain.competition.GetCompetitionByIdUseCase
 import com.example.combeertition.domain.competition.UpdateCompetitionUseCase
+import com.example.combeertition.domain.model.Competition
 import com.example.combeertition.domain.model.CompetitionId
 import com.example.combeertition.domain.rounds.CreateRoundsUseCase
 import com.example.combeertition.feature.main.ui.navControllerGlobal
 import kotlinx.coroutines.launch
 
 class CompetitionDetailViewModel : ViewModel() {
+
+    fun bindUI(context: Context, competitionId: CompetitionId): LiveData<Competition?> = liveData {
+        val state = GetCompetitionByIdUseCase()(competitionId)
+        emit(state)
+    }
 
     fun onAddCompetition(
         competitionId: CompetitionId,
@@ -22,7 +32,7 @@ class CompetitionDetailViewModel : ViewModel() {
         viewModelScope.launch {
             AddCompetitionUseCase(CreateRoundsUseCase())(competitionId, name, color, teams, mode)
         }
-        navControllerGlobal?.navigate("competition/" + competitionId.value)
+        navControllerGlobal?.navigate("competitions")
     }
 
     fun onUpdateCompetition(

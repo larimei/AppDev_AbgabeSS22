@@ -8,14 +8,20 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.combeertition.ui.theme.RsGrey
 
 @Composable
 fun MainBottomNavigation(navController: NavController) {
-    BottomNavigation(modifier = Modifier.height(64.dp)) {
+    BottomNavigation(
+        modifier = Modifier.height(64.dp),
+        backgroundColor = RsGrey,
+        contentColor = Color.Black
+    ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
@@ -27,9 +33,11 @@ fun MainBottomNavigation(navController: NavController) {
             BottomNavigationItem(
                 selected = currentRoute == navItem.routeName,
                 icon = {
-                        Icon(painter = painterResource(navItem.icon),
-                            modifier = Modifier.size(44.dp),
-                            contentDescription = navItem.routeName)
+                    Icon(
+                        painter = painterResource(navItem.icon),
+                        modifier = Modifier.size(44.dp),
+                        contentDescription = navItem.routeName
+                    )
                 },
                 onClick = {
                     navController.navigate(navItem.routeName) {

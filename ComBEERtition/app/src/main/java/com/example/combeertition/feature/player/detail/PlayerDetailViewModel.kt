@@ -6,12 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.example.combeertition.domain.player.AddPlayerUseCase
-import com.example.combeertition.domain.player.UpdatePlayerUseCase
 import com.example.combeertition.domain.model.Player
 import com.example.combeertition.domain.model.PlayerId
-import com.example.combeertition.domain.player.GetPlayerByIdUseCase
-import com.example.combeertition.domain.player.GetPlayersUseCase
+import com.example.combeertition.domain.player.*
 import com.example.combeertition.feature.main.ui.navControllerGlobal
 import com.example.combeertition.feature.player.PlayerUI
 import kotlinx.coroutines.launch
@@ -23,17 +20,23 @@ class PlayerDetailViewModel : ViewModel() {
         emit(state)
     }
 
-    fun onAddPlayer(player: Player) {
+    fun onAddPlayer(playerId: PlayerId, name: String, icon: Int, color: Color) {
         viewModelScope.launch {
-            AddPlayerUseCase()(player)
+            AddPlayerUseCase()(Player.create(playerId, name, icon, color, 0, 0, 0))
             navControllerGlobal?.navigate("players")
         }
     }
 
-    fun onUpdatePlayer(playerId: PlayerId, name: String, color: Color) {
+    fun onUpdatePlayer(playerId: PlayerId, name: String, color: Color, wins: Int, looses: Int, matches: Int) {
         viewModelScope.launch {
             println("update")
-            UpdatePlayerUseCase()(playerId, name, color)
+            UpdatePlayerUseCase()(playerId, name, color, wins, looses, matches)
+        }
+    }
+
+    fun onDeletePlayer(playerId: PlayerId) {
+        viewModelScope.launch {
+            GetPlayerByIdUseCase()(playerId)?.let { DeletePlayerUseCase()(it) }
         }
     }
 }

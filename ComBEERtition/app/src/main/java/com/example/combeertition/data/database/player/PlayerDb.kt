@@ -10,6 +10,9 @@ data class PlayerDb(
     val name: String,
     val icon: Int,
     val color: Int,
+    val wins: Int,
+    val looses: Int,
+    val matches: Int,
     val created: ZonedDateTime,
     val updated: ZonedDateTime,
     val deleted: ZonedDateTime

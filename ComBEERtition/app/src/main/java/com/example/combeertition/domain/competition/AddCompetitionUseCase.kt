@@ -11,7 +11,7 @@ import com.example.combeertition.domain.rounds.CreateRoundsUseCase
 import kotlinx.coroutines.Job
 
 class AddCompetitionUseCase(private val createRoundsUseCase: CreateRoundsUseCase) {
-    operator fun invoke(
+    suspend operator fun invoke(
         competitionId: CompetitionId,
         name: String,
         color: Color,
@@ -19,17 +19,17 @@ class AddCompetitionUseCase(private val createRoundsUseCase: CreateRoundsUseCase
         mode: String
     ): Boolean {
         val rounds = createRoundsUseCase(teams, mode)
-        val competition = Competition.create(
-            competitionId,
-            name,
-            R.drawable.ic_competition,
-            teams,
-            mode,
-            rounds,
-            color
+        competitionRepository.addCompetition(
+            Competition.create(
+                competitionId,
+                name,
+                R.drawable.ic_competition,
+                teams,
+                mode,
+                rounds,
+                color
+            )
         )
-        val updatedCompetitions = competitionRepository.getAllCompetitions().plus(competition)
-        competitionRepository.updateCompetitions(updatedCompetitions)
         return true
     }
 }

@@ -10,6 +10,9 @@ fun teamToDb(team: Team): TeamDb = TeamDb(
     name = team.name,
     icon = team.icon,
     color = team.color.toArgb(),
+    wins = team.wins,
+    looses = team.looses,
+    matches = team.matches,
     created = team.created,
     updated = team.updated,
     deleted = team.deleted,
@@ -21,6 +24,9 @@ fun teamFromDb(teamPlayerRelation: TeamPlayerRelation): Team? {
         name = teamPlayerRelation.team.name,
         icon = teamPlayerRelation.team.icon,
         color = Color(teamPlayerRelation.team.color),
-        players = teamPlayerRelation.players.mapNotNull { it.playerId }
+        players = teamPlayerRelation.players.mapNotNull { it.playerId },
+        wins = teamPlayerRelation.team.wins,
+        looses = teamPlayerRelation.team.looses,
+        matches = teamPlayerRelation.team.matches
     )
 }

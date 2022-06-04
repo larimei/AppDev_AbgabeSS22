@@ -1,18 +1,18 @@
 package com.example.combeertition.feature.competitions
 
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.combeertition.domain.competition.DeleteCompetitionUseCase
+import com.example.combeertition.domain.competition.GetCompetitionByIdUseCase
 import com.example.combeertition.domain.competition.GetCompetitionsUseCase
 import com.example.combeertition.domain.model.CompetitionId
 import com.example.combeertition.feature.competition.CompetitionUI
+import kotlinx.coroutines.launch
 
 
 class CompetitionsViewModel : ViewModel() {
-    fun bindUI(context: Context): LiveData<List<CompetitionUI>> {
-        val state = MutableLiveData(
+    fun bindUI(context: Context): LiveData<List<CompetitionUI>> = liveData {
+        val state =
             GetCompetitionsUseCase()().map { competition ->
                 CompetitionUI(
                     id = competition.id,
@@ -22,12 +22,13 @@ class CompetitionsViewModel : ViewModel() {
                     mode = competition.mode
                 )
             }.sortedBy { it.name }
-        )
-        return state
+        emit(state)
     }
 
     fun onDeleteCompetition(competitionId: CompetitionId) {
-        DeleteCompetitionUseCase()(competitionId)
+        viewModelScope.launch {
+            GetCompetitionByIdUseCase()(competitionId)?.let { DeleteCompetitionUseCase()(it) }
+        }
     }
 
 

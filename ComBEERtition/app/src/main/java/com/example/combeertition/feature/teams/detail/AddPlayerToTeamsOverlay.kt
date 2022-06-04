@@ -1,8 +1,6 @@
-package com.example.combeertition.feature.competitions.detail
+package com.example.combeertition.feature.teams.detail
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,29 +21,31 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.combeertition.R
+import com.example.combeertition.feature.player.PlayerUI
+import com.example.combeertition.feature.player.PlayersViewModel
 import com.example.combeertition.feature.teams.TeamUI
 import com.example.combeertition.feature.teams.TeamsViewModel
 
 
 @Composable
-fun AddTeamsToCompetitionOverlay(
+fun AddPlayerToTeamsOverlay(
     openDialog: MutableState<Boolean>,
-    teams: MutableState<List<String>>,
-    viewModel: TeamsViewModel = viewModel(),
+    players: MutableState<List<String>>,
+    viewModel: PlayersViewModel = viewModel(),
 ) {
-    val teamsList by viewModel.bindUI(LocalContext.current).observeAsState(
+    val playersList by viewModel.bindUI(LocalContext.current).observeAsState(
         (emptyList())
     )
-    AddTeamsToCompetitionOverlayUi(openDialog, teams,teamsList)
+    AddPlayersToTeamOverlayUi(openDialog, players,playersList)
 }
 
 @Composable
-fun AddTeamsToCompetitionOverlayUi(
+fun AddPlayersToTeamOverlayUi(
     openDialog: MutableState<Boolean>,
-    teams: MutableState<List<String>>,
-    teamsList: List<TeamUI>
+    players: MutableState<List<String>>,
+    playersList: List<PlayerUI>
 ) {
-    val teamsOverlay: MutableState<List<String>> = remember { mutableStateOf(teams.value) }
+    val playersOverlay: MutableState<List<String>> = remember { mutableStateOf(players.value) }
 
     AlertDialog(
         onDismissRequest = {
@@ -55,7 +55,7 @@ fun AddTeamsToCompetitionOverlayUi(
             openDialog.value = false
         },
         title = {
-            Text(text = "Teams hinzufügen")
+            Text(text = "Spieler hinzufügen")
         },
         text = {
             Box(
@@ -64,23 +64,23 @@ fun AddTeamsToCompetitionOverlayUi(
                     .height(500.dp)
             ) {
                 LazyColumn() {
-                    items(teamsList) { team ->
+                    items(playersList) { player ->
                         Row(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text(text = team.name)
+                            Text(text = player.name)
                             IconButton(onClick = {
-                                if (teamsOverlay.value.find { it == team.id.value } == null)
-                                    teamsOverlay.value = teamsOverlay.value.plus(team.id.value)
+                                if (playersOverlay.value.find { it == player.id.value } == null)
+                                    playersOverlay.value = playersOverlay.value.plus(player.id.value)
                                 else
-                                    teamsOverlay.value =
-                                        teamsOverlay.value.filter { it != team.id.value }
+                                    playersOverlay.value =
+                                        playersOverlay.value.filter { it != player.id.value }
                             }) {
                                 Icon(
                                     painterResource(
-                                        if (teamsOverlay.value.find { it == team.id.value } == null)
+                                        if (playersOverlay.value.find { it == player.id.value } == null)
                                             R.drawable.ic_baseline_add_24
                                         else
                                             R.drawable.ic_baseline_delete_24),
@@ -97,7 +97,7 @@ fun AddTeamsToCompetitionOverlayUi(
         confirmButton = {
             Button(
                 onClick = {
-                    teams.value = teamsOverlay.value
+                    players.value = playersOverlay.value
                     openDialog.value = false
                 }) {
                 Text("Hinzufügen")

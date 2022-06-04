@@ -23,11 +23,7 @@ class TeamsViewModel : ViewModel() {
         emit(state)
     }
 
-    fun onDeleteTeam(teamId: TeamId) {
-        viewModelScope.launch {
-            GetTeamByIdUseCase()(teamId)?.let { DeleteTeamUseCase()(it) }
-        }
-    }
+
 
 
 }

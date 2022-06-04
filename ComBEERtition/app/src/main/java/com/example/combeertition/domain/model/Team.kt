@@ -12,6 +12,9 @@ class Team private constructor(
     val name: String,
     val icon: Int,
     val color: Color,
+    val wins: Int,
+    val looses: Int,
+    val matches: Int,
     var players: List<String>,
     val created: ZonedDateTime,
     val updated: ZonedDateTime,
@@ -37,10 +40,13 @@ class Team private constructor(
             name: String,
             icon: Int,
             color: Color,
-            players: List<String>
+            players: List<String>,
+            wins: Int,
+            looses: Int,
+            matches: Int
         ): Team {
             val now = ZonedDateTime.now()
-            return Team(id, name, icon, color, players, now, now, now)
+            return Team(id, name, icon, color, wins, looses, matches, players, now, now, now)
         }
     }
 }

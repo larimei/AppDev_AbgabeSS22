@@ -10,7 +10,7 @@ import java.util.*
 import kotlin.random.Random
 
 class CreateRoundsUseCase {
-    operator fun invoke(teams: List<String>, mode: String): List<String> {
+    suspend operator fun invoke(teams: List<String>, mode: String): List<String> {
         var list: List<Round> = emptyList()
         if (mode == "Jeder-gegen-Jeden") {
             var count = (teams.count() / 2.0) * (teams.count() - 1.0)
@@ -28,12 +28,12 @@ class CreateRoundsUseCase {
                         0,
                         0
                     )
+                    roundsRepository.addRound(round)
                     countRounds = countRounds.filter { it != countRounds[randomIndex] }
                     list = list.plus(round)
                 }
             }
             list = list.sortedBy { it.round.toInt() }
-            roundsRepository.updateRounds(list)
         } else if (mode == "Knockout") {
             var final = 1
             while (final < teams.count())

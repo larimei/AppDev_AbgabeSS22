@@ -1,19 +1,23 @@
 package com.example.combeertition.data
 
 import androidx.compose.ui.graphics.Color
+import com.example.combeertition.App
 import com.example.combeertition.R
+import com.example.combeertition.data.database.competition.CompetitionDao
+import com.example.combeertition.data.database.competition.competitionFromDb
+import com.example.combeertition.data.database.competition.competitionToDb
 import com.example.combeertition.domain.model.Competition
 import com.example.combeertition.domain.model.CompetitionId
 
-val competitionRepository = CompetitionRepository()
+val competitionRepository = CompetitionRepository(App.database.competitionDao())
 
-class CompetitionRepository {
+class CompetitionRepository(private val dao: CompetitionDao) {
     private var allCompetitions = listOfNotNull(
         Competition.create(
             id = CompetitionId("bc"),
             name = "Competition 2",
             teams = emptyList(),
-            mode="",
+            mode = "",
             rounds = emptyList(),
             icon = R.drawable.ic_competition,
             color = Color.Magenta
@@ -22,7 +26,7 @@ class CompetitionRepository {
             id = CompetitionId("cc"),
             name = "Competition 3",
             teams = emptyList(),
-            mode="",
+            mode = "",
             rounds = emptyList(),
             icon = R.drawable.ic_competition,
             color = Color.Magenta
@@ -31,7 +35,7 @@ class CompetitionRepository {
             id = CompetitionId("ccc"),
             name = "Competition 4",
             teams = emptyList(),
-            mode="",
+            mode = "",
             rounds = emptyList(),
             icon = R.drawable.ic_competition,
             color = Color.Magenta
@@ -40,7 +44,7 @@ class CompetitionRepository {
             id = CompetitionId("ec"),
             name = "Competition 5",
             teams = emptyList(),
-            mode="One vs One",
+            mode = "One vs One",
             rounds = emptyList(),
             icon = R.drawable.ic_competition,
             color = Color.Magenta
@@ -49,22 +53,29 @@ class CompetitionRepository {
             id = CompetitionId("fc"),
             name = "Competition 6",
             teams = emptyList(),
-            mode="Knockout",
+            mode = "Knockout",
             rounds = emptyList(),
             icon = R.drawable.ic_competition,
             color = Color.Magenta
-            ),
+        ),
     )
 
-    fun getAllCompetitions() = allCompetitions
+    suspend fun getAllCompetitions(): List<Competition> =
+        dao.getAll().mapNotNull { competitionFromDb(it) }
 
-    fun getCompetitionById(id: CompetitionId): Competition? = allCompetitions.firstOrNull {
-        it.id == id
+    suspend fun getCompetitionById(id: CompetitionId): Competition? =
+        dao.getById(id.value)?.let { competitionFromDb(it) }
+
+    suspend fun addCompetition(competition: Competition) {
+        dao.insert(competitionToDb(competition))
     }
 
-    fun updateCompetitions(newCompetitions: List<Competition>): List<Competition> {
-        allCompetitions = newCompetitions
-        return getAllCompetitions()
+    suspend fun deleteCompetition(competition: Competition) {
+        dao.delete(competitionToDb(competition))
+    }
+
+    suspend fun updateCompetition(competition: Competition) {
+        dao.update(competitionToDb(competition))
     }
 
 }

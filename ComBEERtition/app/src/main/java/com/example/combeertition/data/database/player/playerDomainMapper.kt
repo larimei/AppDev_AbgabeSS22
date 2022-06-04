@@ -10,6 +10,9 @@ fun playerToDb(player: Player): PlayerDb = PlayerDb(
     name = player.name,
     icon = player.icon,
     color = player.color.toArgb(),
+    wins = player.wins,
+    looses = player.looses,
+    matches = player.matches,
     created = player.created,
     updated = player.updated,
     deleted = player.deleted,
@@ -20,6 +23,9 @@ fun playerFromDb(player: PlayerDb): Player? {
         id = PlayerId(player.playerId),
         name = player.name,
         icon = player.icon,
-        color = Color(player.color)
+        color = Color(player.color),
+        wins = player.wins,
+        looses = player.looses,
+        matches = player.matches
     )
 }

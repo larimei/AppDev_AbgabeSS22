@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,6 +21,7 @@ import com.example.combeertition.feature.main.navigation.MainBottomNavigation
 import com.example.combeertition.feature.main.navigation.MainNavigationGraph
 import com.example.combeertition.R
 import com.example.combeertition.feature.teams.detail.AddTeamsOverlay
+import com.example.combeertition.ui.theme.RsGrey
 
 var navControllerGlobal: NavHostController? = null
 
@@ -39,7 +41,7 @@ fun MainScreen() {
             val currentRoute = navBackStackEntry?.destination?.route
 
             if (when (currentRouteMain.value?.destination?.route) {
-                    "competitions", "teams", "team/{teamId}", "players", "player/{playerId}" -> true
+                    "competitions", "teams", "players" -> true
                     else -> false
                 }
             )
@@ -61,8 +63,6 @@ fun MainScreen() {
                                     BottomNavigationItemApp.Players.title
                                 )
                             )
-                            "player/{playerId}" -> Text("Spieler")
-                            "team/{teamId}" -> Text("Team")
                         }
                     },
                     navigationIcon =
@@ -75,7 +75,9 @@ fun MainScreen() {
                                 )
                             }
                         }
-                    }
+                    },
+                    backgroundColor = RsGrey,
+                    contentColor = Color.Black
                 )
         },
         floatingActionButton = {
@@ -87,7 +89,6 @@ fun MainScreen() {
                 FloatingActionButton(
                     onClick = {
                         when (currentRouteMain.value?.destination?.route) {
-                            //Overlay öffnen
                             "competitions" -> {
                                 navController.navigate("competition/new")
                             }

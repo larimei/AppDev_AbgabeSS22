@@ -102,7 +102,10 @@ class AddTeamsUseCase {
                     names[Random.nextInt(names.size)],
                     R.drawable.ic_team,
                     Color.Blue,
-                    emptyList()
+                    emptyList(),
+                    0,
+                    0,
+                    0
                 )
             )
         }

@@ -15,10 +15,11 @@ private val DarkColorPalette = darkColors(
 private val LightColorPalette = lightColors(
     primary = RsBlue,
     primaryVariant = RsBlueDark2,
-    secondary = RsYellow
+    secondary = RsYellow,
+    background = RsGrey
 
     /* Other default colors to override
-    background = Color.White,
+
     surface = Color.White,
     onPrimary = Color.White,
     onSecondary = Color.Black,
@@ -28,7 +29,10 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun ComBEERtitionTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun ComBEERtitionTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {

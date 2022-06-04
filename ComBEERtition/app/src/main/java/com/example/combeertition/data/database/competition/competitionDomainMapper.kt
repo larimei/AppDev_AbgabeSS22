@@ -16,16 +16,15 @@ fun competitionToDb(competition: Competition): CompetitionDb = CompetitionDb(
 )
 
 fun competitionFromDb(
-    competitionTeamRelation: CompetitionTeamRelation,
-    competitionRoundRelation: CompetitionRoundRelation
+    competitionTeamRoundRelation: CompetitionTeamRoundRelation,
 ): Competition? {
     return Competition.create(
-        id = CompetitionId(competitionTeamRelation.competition.competitionId),
-        name = competitionTeamRelation.competition.name,
-        icon = competitionTeamRelation.competition.icon,
-        teams = competitionTeamRelation.teams.mapNotNull { it.teamId },
-        mode = competitionTeamRelation.competition.mode,
-        rounds = competitionRoundRelation.rounds.mapNotNull { it.roundId },
-        color = Color(competitionTeamRelation.competition.color)
+        id = CompetitionId(competitionTeamRoundRelation.competition.competition.competitionId),
+        name = competitionTeamRoundRelation.competition.competition.name,
+        icon = competitionTeamRoundRelation.competition.competition.icon,
+        teams = competitionTeamRoundRelation.competition.teams.mapNotNull { it.teamId },
+        mode = competitionTeamRoundRelation.competition.competition.mode,
+        rounds = competitionTeamRoundRelation.rounds.mapNotNull { it.roundId },
+        color = Color(competitionTeamRoundRelation.competition.competition.color)
     )
 }

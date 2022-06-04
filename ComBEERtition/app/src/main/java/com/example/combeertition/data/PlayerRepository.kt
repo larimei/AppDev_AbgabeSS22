@@ -14,44 +14,6 @@ val playerRepository = PlayerRepository(App.database.playerDao())
 
 class PlayerRepository
     (private val dao: PlayerDao) {
-    private var allPlayers = listOfNotNull(
-        Player.create(
-            id = PlayerId("a"),
-            name = "Lara Miester",
-            icon = R.drawable.ic_player,
-            Color.Cyan
-        ),
-        Player.create(
-            id = PlayerId("b"),
-            name = "Lara aerg",
-            icon = R.drawable.ic_player,
-            Color.Cyan
-        ),
-        Player.create(
-            id = PlayerId("c"),
-            name = "Lara seg",
-            icon = R.drawable.ic_player,
-            Color.Cyan
-        ),
-        Player.create(
-            id = PlayerId("d"),
-            name = "Lara eaerhaerh",
-            icon = R.drawable.ic_player,
-            Color.Cyan
-        ),
-        Player.create(
-            id = PlayerId("e"),
-            name = "Laaerhra Miester",
-            icon = R.drawable.ic_player,
-            Color.Cyan
-        ),
-        Player.create(
-            id = PlayerId("f"),
-            name = "Lara Miester",
-            icon = R.drawable.ic_player,
-            Color.Cyan
-        ),
-    )
 
     suspend fun getAllPlayers(): List<Player> = dao.getAll().mapNotNull { playerFromDb(it) }
 
@@ -69,6 +31,4 @@ class PlayerRepository
     suspend fun updatePlayer(player: Player) {
         dao.update(playerToDb(player))
     }
-
-
 }

@@ -23,10 +23,5 @@ class PlayersViewModel : ViewModel() {
         emit(state)
     }
 
-    fun onDeletePlayer(playerId: PlayerId) {
-        viewModelScope.launch {
-            GetPlayerByIdUseCase()(playerId)?.let { DeletePlayerUseCase()(it) }
-        }
-    }
 }
 

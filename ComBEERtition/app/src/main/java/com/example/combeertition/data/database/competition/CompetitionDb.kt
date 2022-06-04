@@ -20,6 +20,7 @@ data class CompetitionDb(
     val deleted: ZonedDateTime,
 )
 
+
 data class CompetitionTeamRelation(
     @Embedded val competition: CompetitionDb,
     @Relation(
@@ -30,12 +31,12 @@ data class CompetitionTeamRelation(
     val teams: List<TeamDb>
 )
 
-data class CompetitionRoundRelation(
-    @Embedded val competition: CompetitionDb,
+data class CompetitionTeamRoundRelation(
+    @Embedded val competition: CompetitionTeamRelation,
     @Relation(
         parentColumn = "competitionId",
         entityColumn = "roundId",
-        associateBy = Junction(CompetitionRoundCrossRefDb::class)
+        entity = RoundDb::class
     )
     val rounds: List<RoundDb>
 )

@@ -4,17 +4,13 @@ import androidx.compose.ui.graphics.Color
 import java.time.ZonedDateTime
 
 @JvmInline
-value class PlayerId(val value: String)
+value class TeamPlayerId(val value: String)
 
 
-class Player private constructor(
-    val id: PlayerId,
-    val name: String,
-    val icon: Int,
-    val color: Color,
-    val wins: Int,
-    val looses: Int,
-    val matches: Int,
+class TeamPlayer private constructor(
+    val id: TeamPlayerId,
+    val teamId: TeamId,
+    val playerId: PlayerId,
     val created: ZonedDateTime,
     val updated: ZonedDateTime,
     val deleted: ZonedDateTime,
@@ -23,31 +19,26 @@ class Player private constructor(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Player
+        other as TeamPlayer
 
         if (id != other.id) return false
 
         return true
     }
-
     override fun hashCode(): Int {
         return id.hashCode()
     }
 
     companion object {
         fun create(
-            id: PlayerId,
-            name: String,
-            icon: Int,
-            color: Color,
-            wins: Int,
-            looses: Int,
-            matches: Int
-        ): Player {
+            id: TeamPlayerId,
+            teamId: TeamId,
+            playerId: PlayerId
+
+        ): TeamPlayer {
             val now = ZonedDateTime.now()
-            return Player(id, name, icon, color, wins, looses, matches, now, now, now)
+            return TeamPlayer(id, teamId, playerId, now, now, now)
         }
     }
 }
-
 

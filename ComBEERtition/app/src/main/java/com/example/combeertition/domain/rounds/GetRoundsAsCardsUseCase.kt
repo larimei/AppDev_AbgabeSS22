@@ -9,7 +9,7 @@ import com.example.combeertition.domain.model.Player
 import com.example.combeertition.domain.model.RoundId
 
 class GetRoundsAsCardsUseCase() {
-    operator fun invoke(competitionId: CompetitionId): List<ExpandableCardModel> {
+    suspend operator fun invoke(competitionId: CompetitionId): List<ExpandableCardModel> {
         val comp = competitionRepository.getCompetitionById(competitionId)
         var cards: List<ExpandableCardModel> = emptyList()
         if (comp != null) {

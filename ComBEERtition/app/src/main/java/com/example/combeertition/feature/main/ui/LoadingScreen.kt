@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,7 +47,15 @@ fun LoadingScreen(navController: NavHostController) {
 fun Splash(alpha: Float) {
     Box(
         modifier = Modifier
-            .background(if (isSystemInDarkTheme()) Color.Black else RsBlue)
+            .background(
+                Brush.verticalGradient(
+                    listOf(
+                        Color.Black,
+                        RsBlue,
+                        Color.White
+                    )
+                )
+            )
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
