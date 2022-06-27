@@ -6,11 +6,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.Composable;
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -33,36 +33,41 @@ fun CompetitionRoundsScreen(
     viewModel: CompetitionRoundsViewModel = viewModel(),
     viewModelTeam: TeamDetailViewModel = viewModel()
 ) {
-    viewModel.onCreateCards(CompetitionId(competitionId))
-    val rounds = viewModel.rounds.collectAsState()
+
+    val rounds by viewModel.onCreateCards(CompetitionId(competitionId)).observeAsState(
+        (emptyList())
+    )
     val expandedCardIds = viewModel.expandedCardIdsList.collectAsState()
     CompetitionRoundsScreenUI(
-        rounds,
         expandedCardIds,
         viewModel::onCardArrowClicked,
         viewModelTeam::bindUI,
-        viewModel::onEditRound
+        viewModel::onEditRound,
+        rounds
     )
 }
 
+
 @Composable
 fun CompetitionRoundsScreenUI(
-    rounds: State<List<ExpandableCardModel>>,
     expandedCardIds: State<List<Int>>,
     onCardArrowClicked: (cardId: Int) -> Unit,
     onGetTeamById: (context: Context, teamId: TeamId) -> LiveData<Team?>,
-    onEditRound: (roundId: RoundId, pointsFirst: Int, pointsSecond: Int) -> Unit
+    onEditRound: (roundId: RoundId, pointsFirst: Int, pointsSecond: Int) -> Unit,
+    rounds: List<ExpandableCardModel>
 ) {
-    Scaffold() {
-        LazyColumn {
-            itemsIndexed(rounds.value) { _, round ->
-                ExpandableCard(
-                    round = round,
-                    onCardArrowClick = { onCardArrowClicked(round.id) },
-                    expanded = expandedCardIds.value.contains(round.id),
-                    onGetTeamById,
-                    onEditRound
-                )
+    if (rounds.isNotEmpty()) {
+        Scaffold() {
+            LazyColumn() {
+                items(rounds) {round ->
+                    ExpandableCard(
+                        round = round,
+                        onCardArrowClick = { onCardArrowClicked(round.id) },
+                        expanded = expandedCardIds.value.contains(round.id),
+                        onGetTeamById,
+                        onEditRound
+                    )
+                }
             }
         }
     }

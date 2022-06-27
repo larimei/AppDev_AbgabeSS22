@@ -14,19 +14,50 @@ class UpdateRoundUseCase {
         val updatedRound = roundsRepository.getRoundById(roundId)
 
         if (updatedRound != null) {
-            roundsRepository.updateRound(
-                Round.create(
-                    roundId,
-                    updatedRound.round,
-                    updatedRound.competition,
-                    updatedRound.firstTeam,
-                    updatedRound.secondTeam,
-                    updatedRound.winner,
-                    updatedRound.loser,
-                    pointsFirst,
-                    pointsSecond
+            if (pointsFirst == 0) {
+                roundsRepository.updateRound(
+                    Round.create(
+                        roundId,
+                        updatedRound.round,
+                        updatedRound.competition,
+                        updatedRound.firstTeam,
+                        updatedRound.secondTeam,
+                        updatedRound.secondTeam,
+                        updatedRound.firstTeam,
+                        pointsFirst,
+                        pointsSecond
+                    )
                 )
-            )
+            } else if (pointsSecond == 0) {
+                roundsRepository.updateRound(
+                    Round.create(
+                        roundId,
+                        updatedRound.round,
+                        updatedRound.competition,
+                        updatedRound.firstTeam,
+                        updatedRound.secondTeam,
+                        updatedRound.firstTeam,
+                        updatedRound.secondTeam,
+                        pointsFirst,
+                        pointsSecond
+                    )
+                )
+
+            } else {
+                roundsRepository.updateRound(
+                    Round.create(
+                        roundId,
+                        updatedRound.round,
+                        updatedRound.competition,
+                        updatedRound.firstTeam,
+                        updatedRound.secondTeam,
+                        updatedRound.winner,
+                        updatedRound.loser,
+                        pointsFirst,
+                        pointsSecond
+                    )
+                )
+            }
             return true
         }
         return false

@@ -1,6 +1,8 @@
 package com.example.combeertition.feature.competitions.detail
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.combeertition.data.ExpandableCardModel
 import com.example.combeertition.domain.model.*
@@ -13,16 +15,12 @@ import kotlinx.coroutines.launch
 
 
 class CompetitionRoundsViewModel : ViewModel() {
-    private val _rounds = MutableStateFlow(listOf<ExpandableCardModel>())
-    val rounds: StateFlow<List<ExpandableCardModel>> get() = _rounds
 
     private val _expandedCardIdsList = MutableStateFlow(listOf<Int>())
     val expandedCardIdsList: StateFlow<List<Int>> get() = _expandedCardIdsList
 
-    fun onCreateCards(competitionId: CompetitionId) {
-        viewModelScope.launch(Dispatchers.Default) {
-            _rounds.emit(GetRoundsAsCardsUseCase()(competitionId))
-        }
+    fun onCreateCards(competitionId: CompetitionId): LiveData<List<ExpandableCardModel>> = liveData {
+        emit(GetRoundsAsCardsUseCase()(competitionId))
     }
 
     fun onCardArrowClicked(cardId: Int) {

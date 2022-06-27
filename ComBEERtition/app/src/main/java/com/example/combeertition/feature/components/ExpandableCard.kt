@@ -192,9 +192,6 @@ fun ExpandableContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        start = 28.dp,
-                        top = 0.dp,
-                        end = 28.dp,
                         bottom = 12.dp
                     )
             ) {
@@ -205,83 +202,91 @@ fun ExpandableContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(
-                        modifier = Modifier.background(RsYellow, CircleShape),
-                        onClick = {
-                            if (pointsFirst > 0) {
-                                pointsFirst--
-                                onEditRound(round.id, pointsFirst, pointsSecond)
+                if (pointsFirst != 0 && pointsSecond != 0) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(
+                            modifier = Modifier.background(RsYellow, CircleShape),
+                            onClick = {
+                                if (pointsFirst > 0) {
+                                    pointsFirst--
+                                    onEditRound(round.id, pointsFirst, pointsSecond)
+                                }
+                            },
+                            content = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_baseline_exposure_neg_1_24),
+                                    contentDescription = "Expandable Arrow",
+                                    tint = Color.Black
+                                )
                             }
-                        },
-                        content = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_baseline_exposure_neg_1_24),
-                                contentDescription = "Expandable Arrow",
-                                tint = Color.Black
-                            )
-                        }
-                    )
-                    Text(
-                        text = pointsFirst.toString(), modifier = Modifier.padding(
-                            horizontal = 14.dp
                         )
-                    )
-                    IconButton(
-                        modifier = Modifier.background(RsYellow, CircleShape),
-                        onClick = {
-                            if (pointsFirst < 10) {
-                                pointsFirst++
-                                onEditRound(round.id, pointsFirst, pointsSecond)
-                            }
-                        },
-                        content = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_baseline_add_24),
-                                contentDescription = "Expandable Arrow",
-                                tint = Color.Black
+                        Text(
+                            text = pointsFirst.toString(), modifier = Modifier.padding(
+                                horizontal = 14.dp
                             )
-                        }
-                    )
-                }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(
-                        modifier = Modifier.background(RsYellow, CircleShape),
-                        onClick = {
-                            if (pointsSecond > 0) {
-                                pointsSecond--
-                                onEditRound(round.id, pointsFirst, pointsSecond)
-                            }
-                        },
-                        content = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_baseline_exposure_neg_1_24),
-                                contentDescription = "Expandable Arrow",
-                                tint = Color.Black
-                            )
-                        }
-                    )
-                    Text(
-                        text = pointsSecond.toString(), modifier = Modifier.padding(
-                            horizontal = 14.dp
                         )
-                    )
-                    IconButton(
-                        modifier = Modifier.background(RsYellow, CircleShape),
-                        onClick = {
-                            if (pointsSecond < 10) {
-                                pointsSecond++
-                                onEditRound(round.id, pointsFirst, pointsSecond)
+                        IconButton(
+                            modifier = Modifier.background(RsYellow, CircleShape),
+                            onClick = {
+                                if (pointsFirst < 10) {
+                                    pointsFirst++
+                                    onEditRound(round.id, pointsFirst, pointsSecond)
+                                }
+                            },
+                            content = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_baseline_add_24),
+                                    contentDescription = "Expandable Arrow",
+                                    tint = Color.Black
+                                )
                             }
-                        },
-                        content = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_baseline_add_24),
-                                contentDescription = "Expandable Arrow",
-                                tint = Color.Black
+                        )
+                    }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(
+                            modifier = Modifier.background(RsYellow, CircleShape),
+                            onClick = {
+                                if (pointsSecond > 0) {
+                                    pointsSecond--
+                                    onEditRound(round.id, pointsFirst, pointsSecond)
+                                }
+                            },
+                            content = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_baseline_exposure_neg_1_24),
+                                    contentDescription = "Expandable Arrow",
+                                    tint = Color.Black
+                                )
+                            }
+                        )
+                        Text(
+                            text = pointsSecond.toString(), modifier = Modifier.padding(
+                                horizontal = 14.dp
                             )
-                        }
-                    )
+                        )
+                        IconButton(
+                            modifier = Modifier.background(RsYellow, CircleShape),
+                            onClick = {
+                                if (pointsSecond < 10) {
+                                    pointsSecond++
+                                    onEditRound(round.id, pointsFirst, pointsSecond)
+                                }
+                            },
+                            content = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_baseline_add_24),
+                                    contentDescription = "Expandable Arrow",
+                                    tint = Color.Black
+                                )
+                            }
+                        )
+                    }
+                } else if (pointsFirst == 0) {
+                    Text("Verlierer")
+                    Text("Gewinner")
+                } else if (pointsSecond == 0) {
+                    Text("Gewinner")
+                    Text("Verlierer")
                 }
             }
         }

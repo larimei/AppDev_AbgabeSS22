@@ -37,8 +37,8 @@ class CreateRoundsUseCase {
                         teams[j],
                         null,
                         null,
-                        0,
-                        0
+                        10,
+                        10
                     )
                     roundsRepository.addRound(round)
                     countRounds = countRounds.filter { it != countRounds[randomIndex] }
@@ -99,8 +99,8 @@ class CreateRoundsUseCase {
                         secondTeam,
                         null,
                         null,
-                        0,
-                        0
+                        10,
+                        10
                     )
                     list = list.plus(round)
                     roundsRepository.addRound(round)
