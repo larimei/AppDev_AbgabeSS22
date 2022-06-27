@@ -18,6 +18,7 @@ class UpdateRoundUseCase {
                 Round.create(
                     roundId,
                     updatedRound.round,
+                    updatedRound.competition,
                     updatedRound.firstTeam,
                     updatedRound.secondTeam,
                     updatedRound.winner,

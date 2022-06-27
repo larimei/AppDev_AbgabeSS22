@@ -7,7 +7,8 @@ import com.example.combeertition.data.database.competition.CompetitionDao
 import com.example.combeertition.data.database.competition.CompetitionDb
 import com.example.combeertition.data.database.player.PlayerDao
 import com.example.combeertition.data.database.player.PlayerDb
-import com.example.combeertition.data.database.relations.CompetitionTeamCrossRefDb
+import com.example.combeertition.data.database.relations.competitionteam.CompetitionTeamDao
+import com.example.combeertition.data.database.relations.competitionteam.CompetitionTeamDb
 import com.example.combeertition.data.database.relations.teamplayer.TeamPlayerDao
 import com.example.combeertition.data.database.relations.teamplayer.TeamPlayerDb
 import com.example.combeertition.data.database.round.RoundDao
@@ -16,14 +17,14 @@ import com.example.combeertition.data.database.team.TeamDao
 import com.example.combeertition.data.database.team.TeamDb
 
 @Database(
-    version = 6,
+    version = 4,
     entities = [
         PlayerDb::class,
         TeamDb::class,
-        CompetitionTeamCrossRefDb::class,
         CompetitionDb::class,
         RoundDb::class,
-        TeamPlayerDb::class
+        TeamPlayerDb::class,
+        CompetitionTeamDb::class
     ],
 )
 @TypeConverters(Converters::class)
@@ -33,4 +34,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun competitionDao(): CompetitionDao
     abstract fun roundDao(): RoundDao
     abstract fun teamPlayerDao(): TeamPlayerDao
+    abstract fun competitionTeamDao(): CompetitionTeamDao
 }

@@ -21,6 +21,9 @@ class UpdateTeamUseCase {
         matches: Int
     ) = withContext(Dispatchers.Default)
     {
+        for (player in teamPlayerRepository.getByTeamId(teamId)) {
+            teamPlayerRepository.deleteTeamPlayer(player)
+        }
         for (player in players) {
             teamPlayerRepository.addTeamPlayer(
                 TeamPlayer.create(

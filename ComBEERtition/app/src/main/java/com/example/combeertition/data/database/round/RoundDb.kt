@@ -8,6 +8,7 @@ import java.time.ZonedDateTime
 data class RoundDb(
     @PrimaryKey
     val roundId: String,
+    val competitionId: String,
     val round: String,
     val firstTeam: String,
     val secondTeam: String,

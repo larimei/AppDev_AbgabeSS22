@@ -20,6 +20,6 @@ class GetRoundsAsCardsUseCase() {
                 )
             }
         }
-        return cards
+        return cards.sortedBy { it.round?.round?.toInt() }
     }
 }

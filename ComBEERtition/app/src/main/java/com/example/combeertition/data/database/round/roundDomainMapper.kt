@@ -6,6 +6,7 @@ import com.example.combeertition.domain.model.RoundId
 fun roundToDb(round: Round): RoundDb = RoundDb(
     roundId = round.id.value,
     round = round.round,
+    competitionId = round.competition,
     firstTeam = round.firstTeam,
     secondTeam = round.secondTeam,
     winner = round.winner,
@@ -21,6 +22,7 @@ fun roundFromDb(roundDb: RoundDb): Round? {
     return Round.create(
         id = RoundId(roundDb.roundId),
         round = roundDb.round,
+        competition = roundDb.competitionId,
         firstTeam = roundDb.firstTeam,
         secondTeam = roundDb.secondTeam,
         winner = roundDb.winner,

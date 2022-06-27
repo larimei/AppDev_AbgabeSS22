@@ -68,6 +68,7 @@ fun CompetitionInformationScreen(
         competition,
         viewModel::onAddCompetition,
         viewModel::onUpdateCompetition,
+        viewModel::onDeleteCompetition,
         viewModelTeam::bindUI,
         color
     )
@@ -78,8 +79,9 @@ fun CompetitionInformationScreen(
 fun CompetitionDetailScreenUI(
     competitionIdString: String?,
     competition: Competition?,
-    onAddCompetition: (competitionId: CompetitionId, name: String, color: Color, teams: List<String>, mode: String) -> Unit,
-    onUpdateCompetition: (CompetitionId: CompetitionId, name: String, color: Color, teams: List<String>, mode: String) -> Unit,
+    onAddCompetition: (name: String, color: Color, teams: List<String>, mode: String) -> Unit,
+    onUpdateCompetition: (competitionId: CompetitionId, name: String, color: Color, teams: List<String>, mode: String) -> Unit,
+    onDeleteCompetition: (competitionId: CompetitionId) -> Unit,
     onGetTeamById: (context: Context, teamId: TeamId) -> LiveData<Team?>,
     color: MutableState<Color>
 ) {
@@ -213,7 +215,7 @@ fun CompetitionDetailScreenUI(
                             openDialogTeam.value = true
                         }, modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 40.dp)
+                            .padding(horizontal = 4.dp)
                     ) {
                         Row() {
                             Icon(
@@ -232,11 +234,38 @@ fun CompetitionDetailScreenUI(
                             )
                         }
                     }
+                    if (competition != null) {
+                        Button(
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = RsRed,
+                                contentColor = Color.White
+                            ),
+                            onClick = {
+                                onDeleteCompetition(competition.id)
+                            }, modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 8.dp)
+
+                        ) {
+                            Row() {
+                                Icon(
+                                    painterResource(R.drawable.ic_baseline_delete_24),
+                                    contentDescription = "delete comp",
+                                    modifier = Modifier.padding(horizontal = 4.dp)
+                                )
+                                Text(
+                                    text = ("Löschen"),
+                                    fontWeight = FontWeight.Bold,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                            }
+                        }
+                    }
                     Button(
                         onClick = {
                             if (competitionId == null)
                                 onAddCompetition(
-                                    CompetitionId(UUID.randomUUID().toString()),
                                     name,
                                     color.value,
                                     teams.value,
@@ -254,7 +283,7 @@ fun CompetitionDetailScreenUI(
                                 }
                         }, modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 40.dp)
+                            .padding(horizontal = 4.dp)
                     ) {
                         Row() {
                             Icon(
@@ -276,7 +305,7 @@ fun CompetitionDetailScreenUI(
                     ColorPicker(openDialog = openDialog, colorNew = color)
                 }
                 if (openDialogTeam.value) {
-                    AddPlayerToTeamsOverlay(openDialog = openDialogTeam, teams)
+                    AddTeamsToCompetitionOverlay(openDialog = openDialogTeam, teams)
                 }
             }
         }

@@ -1,7 +1,7 @@
 package com.example.combeertition.data.database.competition
 
 import androidx.room.*
-import com.example.combeertition.data.database.relations.CompetitionTeamCrossRefDb
+import com.example.combeertition.data.database.relations.competitionteam.CompetitionTeamDb
 import com.example.combeertition.data.database.round.RoundDb
 import com.example.combeertition.data.database.team.TeamDb
 import java.time.ZonedDateTime
@@ -25,7 +25,7 @@ data class CompetitionWithTeams(
     @Relation(
         parentColumn = "competitionId",
         entityColumn = "teamId",
-        associateBy = Junction(CompetitionTeamCrossRefDb::class)
+        associateBy = Junction(CompetitionTeamDb::class)
     )
     val teams: List<TeamDb>
 )
@@ -34,7 +34,7 @@ data class CompetitionWithTeamsAndRounds(
     @Embedded val competition: CompetitionWithTeams,
     @Relation(
         parentColumn = "competitionId",
-        entityColumn = "roundId",
+        entityColumn = "competitionId",
         entity = RoundDb::class
     )
     val rounds: List<RoundDb>

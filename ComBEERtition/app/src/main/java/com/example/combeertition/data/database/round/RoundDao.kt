@@ -16,4 +16,7 @@ interface RoundDao {
 
     @Query("SELECT * FROM round WHERE roundId = :id")
     suspend fun getById(id: String): RoundDb?
+
+    @Query("SELECT * FROM round WHERE competitionId = :id")
+    suspend fun getByCompetitionId(id: String): List<RoundDb>
 }

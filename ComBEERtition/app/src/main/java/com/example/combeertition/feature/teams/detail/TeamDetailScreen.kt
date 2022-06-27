@@ -291,7 +291,6 @@ fun TeamDetailScreenUI(
                         ),
                         onClick = {
                             onDeleteTeam(team.id)
-                            navControllerGlobal?.navigate("teams")
                         }, modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp)

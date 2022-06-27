@@ -217,26 +217,23 @@ fun PlayerDetailScreenUI(
                                     )
                                 }
                             } else {
-                                player?.let {
-                                    Stat(
-                                        statName = "Noch nichts gewonnen",
-                                        statValue = 1,
-                                        statMaxValue = 1,
-                                        statColor = RsYellow,
-                                        animDelay = 10,
-                                        new = true
-                                    )
-                                }
-                                player?.let {
-                                    Stat(
-                                        statName = "Noch nichts verloren",
-                                        statValue = 1,
-                                        statMaxValue = 1,
-                                        statColor = RsRed,
-                                        animDelay = 10,
-                                        new = true
-                                    )
-                                }
+                                Stat(
+                                    statName = "Noch nichts gewonnen",
+                                    statValue = 1,
+                                    statMaxValue = 1,
+                                    statColor = RsYellow,
+                                    animDelay = 10,
+                                    new = true
+                                )
+
+                                Stat(
+                                    statName = "Noch nichts verloren",
+                                    statValue = 1,
+                                    statMaxValue = 1,
+                                    statColor = RsRed,
+                                    animDelay = 10,
+                                    new = true
+                                )
                             }
                         }
                     }
@@ -249,7 +246,6 @@ fun PlayerDetailScreenUI(
                             ),
                             onClick = {
                                 onDeletePlayer(player.id)
-                                navControllerGlobal?.navigate("players")
                             }, modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 40.dp)

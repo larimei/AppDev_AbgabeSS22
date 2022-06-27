@@ -31,6 +31,7 @@ class TeamDetailViewModel : ViewModel() {
     fun onAddTeams(count: Int, players: List<String>, random: Boolean) {
         viewModelScope.launch {
             AddTeamsUseCase()(count, players, random)
+            navControllerGlobal?.popBackStack()
             navControllerGlobal?.navigate("teams")
         }
     }
@@ -47,6 +48,7 @@ class TeamDetailViewModel : ViewModel() {
         viewModelScope.launch {
             UpdateTeamUseCase()(teamId, name, color, players, wins, looses, matches)
         }
+        navControllerGlobal?.popBackStack()
         navControllerGlobal?.navigate("team/" + teamId.value)
     }
 
@@ -54,6 +56,7 @@ class TeamDetailViewModel : ViewModel() {
         viewModelScope.launch {
             GetTeamByIdUseCase()(teamId)?.let { DeleteTeamUseCase()(it) }
         }
+        navControllerGlobal?.popBackStack()
         navControllerGlobal?.navigate("teams")
     }
 }

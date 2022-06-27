@@ -19,5 +19,5 @@ interface TeamPlayerDao {
     suspend fun getById(id: String): TeamPlayerDb?
 
     @Query("SELECT * FROM teamPlayer WHERE teamId = :id")
-    suspend fun getByTeamId(id: String): TeamPlayerDb?
+    suspend fun getByTeamId(id: String): List<TeamPlayerDb>
 }

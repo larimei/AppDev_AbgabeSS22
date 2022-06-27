@@ -4,9 +4,7 @@ import com.example.combeertition.App
 import com.example.combeertition.data.database.relations.teamplayer.teamPlayerToDb
 import com.example.combeertition.data.database.relations.teamplayer.teamPlayerFromDb
 import com.example.combeertition.data.database.relations.teamplayer.TeamPlayerDao
-import com.example.combeertition.domain.model.Player
-import com.example.combeertition.domain.model.PlayerId
-import com.example.combeertition.domain.model.TeamPlayer
+import com.example.combeertition.domain.model.*
 
 val teamPlayerRepository = TeamPlayerRepository(App.database.teamPlayerDao())
 
@@ -15,8 +13,11 @@ class TeamPlayerRepository
 
     suspend fun getAllTeamPlayers(): List<TeamPlayer> = dao.getAll().mapNotNull { teamPlayerFromDb(it) }
 
-    suspend fun getTeamPlayerById(id: PlayerId): TeamPlayer? =
+    suspend fun getTeamPlayerById(id: TeamPlayerId): TeamPlayer? =
         dao.getById(id.value)?.let { teamPlayerFromDb(it) }
+
+    suspend fun getByTeamId(id: TeamId): List<TeamPlayer> =
+        dao.getByTeamId(id.value).mapNotNull { teamPlayerFromDb(it) }
 
     suspend fun addTeamPlayer(teamPlayer: TeamPlayer) {
         dao.insert(teamPlayerToDb(teamPlayer))

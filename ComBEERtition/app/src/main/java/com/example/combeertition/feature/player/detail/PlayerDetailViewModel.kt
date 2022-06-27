@@ -23,20 +23,24 @@ class PlayerDetailViewModel : ViewModel() {
     fun onAddPlayer(playerId: PlayerId, name: String, icon: Int, color: Color) {
         viewModelScope.launch {
             AddPlayerUseCase()(Player.create(playerId, name, icon, color, 0, 0, 0))
-            navControllerGlobal?.navigate("players")
+            navControllerGlobal?.popBackStack()
+            navControllerGlobal?.navigate("player/" + playerId.value)
         }
     }
 
     fun onUpdatePlayer(playerId: PlayerId, name: String, color: Color, wins: Int, looses: Int, matches: Int) {
         viewModelScope.launch {
-            println("update")
             UpdatePlayerUseCase()(playerId, name, color, wins, looses, matches)
+            navControllerGlobal?.popBackStack()
+            navControllerGlobal?.navigate("player/" + playerId.value)
         }
     }
 
     fun onDeletePlayer(playerId: PlayerId) {
         viewModelScope.launch {
             GetPlayerByIdUseCase()(playerId)?.let { DeletePlayerUseCase()(it) }
+            navControllerGlobal?.popBackStack()
+            navControllerGlobal?.navigate("players")
         }
     }
 }

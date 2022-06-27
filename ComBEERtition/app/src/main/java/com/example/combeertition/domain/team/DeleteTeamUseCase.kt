@@ -8,6 +8,9 @@ import java.util.*
 
 class DeleteTeamUseCase {
     suspend operator fun invoke(team: Team): Boolean {
+        for (player in teamPlayerRepository.getByTeamId(team.id)) {
+            teamPlayerRepository.deleteTeamPlayer(player)
+        }
         teamRepository.deleteTeam(team)
         return true
     }
