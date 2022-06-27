@@ -17,7 +17,7 @@ import com.example.combeertition.data.database.team.TeamDao
 import com.example.combeertition.data.database.team.TeamDb
 
 @Database(
-    version = 4,
+    version = 5,
     entities = [
         PlayerDb::class,
         TeamDb::class,

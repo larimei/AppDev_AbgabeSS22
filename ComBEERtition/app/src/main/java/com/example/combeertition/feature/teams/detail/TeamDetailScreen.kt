@@ -43,6 +43,7 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.LiveData
 import com.example.combeertition.feature.competitions.detail.AddTeamsToCompetitionOverlay
 import com.example.combeertition.feature.components.ColorPicker
+import com.example.combeertition.feature.components.DeleteOverlay
 import com.example.combeertition.feature.main.ui.navControllerGlobal
 import com.example.combeertition.feature.player.detail.PlayerDetailViewModel
 import com.example.combeertition.feature.player.detail.Stat
@@ -78,6 +79,7 @@ fun TeamDetailScreenUI(
         var players = remember { mutableStateOf(team.players) }
         var openDialog = remember { mutableStateOf(false) }
         var openDialogPlayer = remember { mutableStateOf(false) }
+        var openDialogDelete = remember { mutableStateOf(false) }
 
         val controller = rememberColorPickerController()
         var set = false
@@ -348,6 +350,9 @@ fun TeamDetailScreenUI(
             }
             if (openDialogPlayer.value) {
                 AddPlayerToTeamsOverlay(openDialog = openDialogPlayer, players)
+            }
+            if (openDialogDelete.value) {
+                DeleteOverlay(openDialog = openDialogDelete, "Team")
             }
         }
     }

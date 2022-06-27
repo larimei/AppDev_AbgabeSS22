@@ -16,8 +16,12 @@ class TeamPlayerRepository
     suspend fun getTeamPlayerById(id: TeamPlayerId): TeamPlayer? =
         dao.getById(id.value)?.let { teamPlayerFromDb(it) }
 
+
     suspend fun getByTeamId(id: TeamId): List<TeamPlayer> =
         dao.getByTeamId(id.value).mapNotNull { teamPlayerFromDb(it) }
+
+    suspend fun getByPlayerId(id: PlayerId): List<TeamPlayer> =
+        dao.getByPlayerId(id.value).mapNotNull { teamPlayerFromDb(it) }
 
     suspend fun addTeamPlayer(teamPlayer: TeamPlayer) {
         dao.insert(teamPlayerToDb(teamPlayer))

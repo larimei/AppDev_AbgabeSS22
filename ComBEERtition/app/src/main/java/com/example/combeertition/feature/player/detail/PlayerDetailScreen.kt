@@ -35,6 +35,7 @@ import com.example.combeertition.data.playerRepository
 import com.example.combeertition.domain.model.CompetitionId
 import com.example.combeertition.domain.model.PlayerId
 import com.example.combeertition.feature.components.ColorPicker
+import com.example.combeertition.feature.components.DeleteOverlay
 import com.example.combeertition.feature.main.ui.navControllerGlobal
 import com.example.combeertition.ui.theme.RsBlue
 import com.example.combeertition.ui.theme.RsRed
@@ -52,7 +53,8 @@ fun PlayerDetailScreen(playerIdString: String, viewModel: PlayerDetailViewModel 
         player,
         viewModel::onAddPlayer,
         viewModel::onUpdatePlayer,
-        viewModel::onDeletePlayer
+        viewModel::onDeletePlayer,
+        viewModel::checkForDelete
     )
 }
 
@@ -63,7 +65,8 @@ fun PlayerDetailScreenUI(
     player: Player?,
     onAddPlayer: (playerId: PlayerId, name: String, icon: Int, color: Color) -> Unit,
     onUpdatePlayer: (playerId: PlayerId, name: String, color: Color, wins: Int, looses: Int, matches: Int) -> Unit,
-    onDeletePlayer: (playerId: PlayerId) -> Unit
+    onDeletePlayer: (playerId: PlayerId) -> Unit,
+    checkForDelete: (playerId: PlayerId) -> LiveData<Boolean>
 ) {
     if (playerIdString == "new" || player != null) {
 
@@ -75,6 +78,7 @@ fun PlayerDetailScreenUI(
         var name by remember { mutableStateOf(player?.name ?: "Spielername") }
         var color = remember { mutableStateOf(player?.color ?: RsBlue) }
         var openDialog = remember { mutableStateOf(false) }
+        var openDialogDelete = remember { mutableStateOf(false) }
 
         val scrollState = rememberScrollState()
 
@@ -245,7 +249,11 @@ fun PlayerDetailScreenUI(
                                 contentColor = Color.White
                             ),
                             onClick = {
-                                onDeletePlayer(player.id)
+                                if (checkForDelete(player.id).value == true) {
+                                    onDeletePlayer(player.id)
+                                } else {
+                                    openDialogDelete.value = true
+                                }
                             }, modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 40.dp)
@@ -308,6 +316,9 @@ fun PlayerDetailScreenUI(
             }
             if (openDialog.value) {
                 ColorPicker(openDialog = openDialog, colorNew = color)
+            }
+            if (openDialogDelete.value) {
+                DeleteOverlay(openDialog = openDialogDelete, "Spieler")
             }
         }
     }
@@ -374,6 +385,7 @@ fun Stat(
                     )
                 }
             }
+
         }
     }
 }

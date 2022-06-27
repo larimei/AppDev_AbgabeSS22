@@ -57,7 +57,7 @@ fun CompetitionRoundsScreenUI(
     rounds: List<ExpandableCardModel>
 ) {
     if (rounds.isNotEmpty()) {
-        Scaffold() {
+        Box() {
             LazyColumn() {
                 items(rounds) {round ->
                     ExpandableCard(

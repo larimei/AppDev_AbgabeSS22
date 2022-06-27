@@ -20,4 +20,7 @@ interface TeamPlayerDao {
 
     @Query("SELECT * FROM teamPlayer WHERE teamId = :id")
     suspend fun getByTeamId(id: String): List<TeamPlayerDb>
+
+    @Query("SELECT * FROM teamPlayer WHERE playerId = :id")
+    suspend fun getByPlayerId(id: String): List<TeamPlayerDb>
 }

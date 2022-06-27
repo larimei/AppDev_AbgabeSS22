@@ -43,4 +43,9 @@ class PlayerDetailViewModel : ViewModel() {
             navControllerGlobal?.navigate("players")
         }
     }
+
+    fun checkForDelete(playerId: PlayerId): LiveData<Boolean> = liveData {
+        val state = CheckForDeletePlayerUseCase()(playerId)
+        emit(state)
+    }
 }
