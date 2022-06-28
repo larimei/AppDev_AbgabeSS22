@@ -20,6 +20,9 @@ class CompetitionTeamRepository
     suspend fun getByCompetitionId(id: CompetitionId): List<CompetitionTeam> =
         dao.getByCompetitionId(id.value).mapNotNull { competitionTeamFromDb(it) }
 
+    suspend fun getByTeamId(id: TeamId): List<CompetitionTeam> =
+        dao.getByTeamId(id.value).mapNotNull { competitionTeamFromDb(it) }
+
     suspend fun addCompetitionTeam(competitionTeam: CompetitionTeam) {
         dao.insert(competitionTeamToDb(competitionTeam))
     }

@@ -20,4 +20,7 @@ interface CompetitionTeamDao {
 
     @Query("SELECT * FROM competitionTeam WHERE competitionId = :id")
     suspend fun getByCompetitionId(id: String): List<CompetitionTeamDb>
+
+    @Query("SELECT * FROM competitionTeam WHERE teamId = :id")
+    suspend fun getByTeamId(id: String): List<CompetitionTeamDb>
 }

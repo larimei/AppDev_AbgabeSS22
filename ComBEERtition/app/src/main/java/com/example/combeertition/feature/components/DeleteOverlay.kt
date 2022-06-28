@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun DeleteOverlay(
     openDialog: MutableState<Boolean>,
-    text: String
+    text: String,
 ) {
 
     DeleteOverlayUi(openDialog, text)
@@ -39,7 +39,7 @@ fun DeleteOverlayUi(
                 modifier = Modifier
                     .wrapContentSize(align = Alignment.TopStart)
             ) {
-                Text("Ihr $text ist noch in mindestens einem Team und eventuell sogar in einem Turnier. Lösche erst das, um den Spieler zu entfernen.")
+                Text(text = text)
             }
         },
         confirmButton = {

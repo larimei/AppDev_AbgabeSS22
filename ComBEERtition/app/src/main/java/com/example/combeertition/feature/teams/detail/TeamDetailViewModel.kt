@@ -11,12 +11,10 @@ import com.example.combeertition.domain.model.PlayerId
 import com.example.combeertition.domain.model.Team
 import com.example.combeertition.domain.model.TeamId
 import com.example.combeertition.domain.player.AddPlayerUseCase
+import com.example.combeertition.domain.player.CheckForDeletePlayerUseCase
 import com.example.combeertition.domain.player.GetPlayerByIdUseCase
 import com.example.combeertition.domain.player.UpdatePlayerUseCase
-import com.example.combeertition.domain.team.AddTeamsUseCase
-import com.example.combeertition.domain.team.DeleteTeamUseCase
-import com.example.combeertition.domain.team.GetTeamByIdUseCase
-import com.example.combeertition.domain.team.UpdateTeamUseCase
+import com.example.combeertition.domain.team.*
 import com.example.combeertition.feature.main.ui.navControllerGlobal
 import kotlinx.coroutines.launch
 
@@ -58,5 +56,10 @@ class TeamDetailViewModel : ViewModel() {
         }
         navControllerGlobal?.popBackStack()
         navControllerGlobal?.navigate("teams")
+    }
+
+    fun checkForDelete(teamId: TeamId): LiveData<Boolean> = liveData {
+        val state = CheckForDeleteTeamUseCase()(teamId)
+        emit(state)
     }
 }

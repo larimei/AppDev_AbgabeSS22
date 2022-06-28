@@ -48,13 +48,14 @@ import java.util.*
 @Composable
 fun PlayerDetailScreen(playerIdString: String, viewModel: PlayerDetailViewModel = viewModel()) {
     val player by viewModel.bindUI(LocalContext.current, PlayerId(playerIdString)).observeAsState()
+    val canDelete by viewModel.checkForDelete(PlayerId(playerIdString)).observeAsState()
     PlayerDetailScreenUI(
         playerIdString,
         player,
         viewModel::onAddPlayer,
         viewModel::onUpdatePlayer,
         viewModel::onDeletePlayer,
-        viewModel::checkForDelete
+        canDelete
     )
 }
 
@@ -66,7 +67,7 @@ fun PlayerDetailScreenUI(
     onAddPlayer: (playerId: PlayerId, name: String, icon: Int, color: Color) -> Unit,
     onUpdatePlayer: (playerId: PlayerId, name: String, color: Color, wins: Int, looses: Int, matches: Int) -> Unit,
     onDeletePlayer: (playerId: PlayerId) -> Unit,
-    checkForDelete: (playerId: PlayerId) -> LiveData<Boolean>
+    canDelete: Boolean?
 ) {
     if (playerIdString == "new" || player != null) {
 
@@ -249,7 +250,7 @@ fun PlayerDetailScreenUI(
                                 contentColor = Color.White
                             ),
                             onClick = {
-                                if (checkForDelete(player.id).value == true) {
+                                if (canDelete == true) {
                                     onDeletePlayer(player.id)
                                 } else {
                                     openDialogDelete.value = true
@@ -318,7 +319,10 @@ fun PlayerDetailScreenUI(
                 ColorPicker(openDialog = openDialog, colorNew = color)
             }
             if (openDialogDelete.value) {
-                DeleteOverlay(openDialog = openDialogDelete, "Spieler")
+                DeleteOverlay(
+                    openDialog = openDialogDelete,
+                    "Ihr Spieler ist noch in mindestens einem Team und eventuell sogar in einem Turnier. Lösche das erst, bevor du den Spieler löschst."
+                )
             }
         }
     }

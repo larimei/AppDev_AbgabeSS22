@@ -57,11 +57,13 @@ fun TeamDetailScreen(
     viewModelPlayer: PlayerDetailViewModel = viewModel()
 ) {
     val team by viewModel.bindUI(LocalContext.current, TeamId(teamIdString)).observeAsState()
+    val canDelete by viewModel.checkForDelete(TeamId(teamIdString)).observeAsState()
     TeamDetailScreenUI(
         viewModel::onUpdateTeam,
         viewModelPlayer::bindUI,
         viewModel::onDeleteTeam,
-        team
+        team,
+        canDelete
     )
 }
 
@@ -71,7 +73,8 @@ fun TeamDetailScreenUI(
     onUpdateTeam: (teamId: TeamId, name: String, color: Color, players: List<String>, wins: Int, looses: Int, matches: Int) -> Unit,
     onGetPlayerById: (context: Context, playerId: PlayerId) -> LiveData<Player?>,
     onDeleteTeam: (teamId: TeamId) -> Unit,
-    team: Team?
+    team: Team?,
+    canDelete: Boolean?
 ) {
     if (team != null) {
         var name by remember { mutableStateOf(team.name) }
@@ -292,7 +295,11 @@ fun TeamDetailScreenUI(
                             contentColor = Color.White
                         ),
                         onClick = {
-                            onDeleteTeam(team.id)
+                            if (canDelete == true) {
+                                onDeleteTeam(team.id)
+                            } else {
+                                openDialogDelete.value = true
+                            }
                         }, modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp)
@@ -352,7 +359,7 @@ fun TeamDetailScreenUI(
                 AddPlayerToTeamsOverlay(openDialog = openDialogPlayer, players)
             }
             if (openDialogDelete.value) {
-                DeleteOverlay(openDialog = openDialogDelete, "Team")
+                DeleteOverlay(openDialog = openDialogDelete, "Ihr Team ist noch in mindestens einem Turnier. Lösche das erst, bevor du das Team löschst.")
             }
         }
     }

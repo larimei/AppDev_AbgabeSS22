@@ -12,9 +12,6 @@ import kotlinx.coroutines.withContext
 
 class CheckForDeletePlayerUseCase() {
     suspend operator fun invoke(playerId: PlayerId): Boolean {
-        for (team in teamPlayerRepository.getByPlayerId(playerId)) {
-            return false
-        }
-        return true
+        return teamPlayerRepository.getByPlayerId(playerId).count() <= 0
     }
 }
