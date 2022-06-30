@@ -8,6 +8,7 @@ import com.example.combeertition.data.ExpandableCardModel
 import com.example.combeertition.domain.model.*
 import com.example.combeertition.domain.rounds.UpdateRoundUseCase
 import com.example.combeertition.domain.rounds.GetRoundsAsCardsUseCase
+import com.example.combeertition.domain.rounds.SetWinnerToRoundUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,7 +32,7 @@ class CompetitionRoundsViewModel : ViewModel() {
 
     fun onEditRound(roundId: RoundId, pointsFirst: Int, pointsSecond: Int) {
         viewModelScope.launch {
-            UpdateRoundUseCase()(roundId, pointsFirst, pointsSecond)
+            UpdateRoundUseCase(SetWinnerToRoundUseCase())(roundId, pointsFirst, pointsSecond)
         }
     }
 }

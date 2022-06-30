@@ -37,7 +37,8 @@ fun ExpandableCard(
     onCardArrowClick: () -> Unit,
     expanded: Boolean,
     onGetTeamById: (context: Context, teamId: TeamId) -> LiveData<Team?>,
-    onEditRound: (roundId: RoundId, pointsFirst: Int, pointsSecond: Int) -> Unit
+    onEditRound: (roundId: RoundId, pointsFirst: Int, pointsSecond: Int) -> Unit,
+    mode: String
 ) {
 
     val transitionState = remember {
@@ -93,7 +94,7 @@ fun ExpandableCard(
                     degrees = arrowRotationDegree,
                     onClick = onCardArrowClick
                 )
-                round.round?.round?.let { CardTitle(title = it) }
+                round.round?.round?.let { CardTitle(title = it, mode = mode) }
             }
             round.round?.let {
                 ExpandableContent(
@@ -111,9 +112,9 @@ fun ExpandableCard(
 
 
 @Composable
-fun CardTitle(title: String) {
+fun CardTitle(title: String, mode: String) {
     Text(
-        text = title,
+        text = if (mode=="Jeder-gegen-Jeden") "Runde $title" else getText(title.toInt()),
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
@@ -291,4 +292,19 @@ fun ExpandableContent(
             }
         }
     }
+}
+
+fun getText(number: Int): String {
+    return when (number) {
+        1 -> "Finale"
+        2 -> "Halbfinale"
+        4 -> "Viertelfinale"
+        8 -> "Achtelfinale"
+        16 -> "Sechszehntelfinale"
+        32 -> "Zweiunddreissigstelfinale"
+        else -> {
+            "1/$number-Finale"
+        }
+    }
+
 }

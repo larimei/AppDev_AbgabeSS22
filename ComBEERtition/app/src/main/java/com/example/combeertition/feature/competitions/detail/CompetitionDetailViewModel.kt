@@ -14,6 +14,7 @@ import com.example.combeertition.domain.model.Competition
 import com.example.combeertition.domain.model.CompetitionId
 import com.example.combeertition.domain.model.TeamId
 import com.example.combeertition.domain.rounds.CreateRoundsUseCase
+import com.example.combeertition.domain.rounds.SetWinnerToRoundUseCase
 import com.example.combeertition.domain.team.DeleteTeamUseCase
 import com.example.combeertition.domain.team.GetTeamByIdUseCase
 import com.example.combeertition.feature.main.ui.navControllerGlobal
@@ -33,7 +34,12 @@ class CompetitionDetailViewModel : ViewModel() {
         mode: String
     ) {
         viewModelScope.launch {
-            AddCompetitionUseCase(CreateRoundsUseCase())(name, color, teams, mode)
+            AddCompetitionUseCase(CreateRoundsUseCase(SetWinnerToRoundUseCase()))(
+                name,
+                color,
+                teams,
+                mode
+            )
         }
         navControllerGlobal?.popBackStack()
         navControllerGlobal?.navigate("competitions")
@@ -47,7 +53,7 @@ class CompetitionDetailViewModel : ViewModel() {
         mode: String,
     ) {
         viewModelScope.launch {
-            UpdateCompetitionUseCase(CreateRoundsUseCase())(competitionId, name, color, teams, mode)
+            UpdateCompetitionUseCase(CreateRoundsUseCase(SetWinnerToRoundUseCase()))(competitionId, name, color, teams, mode)
             navControllerGlobal?.popBackStack()
             navControllerGlobal?.navigate("competition/" + competitionId.value)
         }

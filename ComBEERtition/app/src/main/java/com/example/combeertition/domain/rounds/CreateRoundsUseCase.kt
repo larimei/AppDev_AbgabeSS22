@@ -1,18 +1,14 @@
 package com.example.combeertition.domain.rounds
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import com.example.combeertition.data.roundsRepository
-import com.example.combeertition.data.teamPlayerRepository
 import com.example.combeertition.domain.model.CompetitionId
 import com.example.combeertition.domain.model.Round
 import com.example.combeertition.domain.model.RoundId
-import java.lang.Math.sqrt
 import java.util.*
 import kotlin.math.log2
 import kotlin.random.Random
 
-class CreateRoundsUseCase {
+class CreateRoundsUseCase(private val setWinnerToRoundUseCase: SetWinnerToRoundUseCase) {
     suspend operator fun invoke(
         teams: List<String>,
         mode: String,
@@ -24,7 +20,7 @@ class CreateRoundsUseCase {
 
         var list: List<Round> = emptyList()
         if (mode == "Jeder-gegen-Jeden") {
-            var count = (teams.count() / 2.0) * (teams.count() - 1.0)
+            val count = (teams.count() / 2.0) * (teams.count() - 1.0)
             var countRounds: List<Int> = listOf(0 until count.toInt()).flatten()
             for (i in 0..teams.count()) {
                 for (j in i + 1 until teams.count()) {
@@ -45,15 +41,15 @@ class CreateRoundsUseCase {
                     list = list.plus(round)
                 }
             }
-            //list = list.sortedBy { it.round.toInt() }
         } else if (mode == "Knockout") {
             var teamsKnockout = teams
             var roundsPerRound = 1
-            while (roundsPerRound < teams.count()/2.0)
+            while (roundsPerRound < teams.count() / 2.0)
                 roundsPerRound *= 2
             var freePersons = roundsPerRound * 2 - teamsKnockout.count()
             var matches = log2(roundsPerRound.toDouble()) + 1
             var roundsWithoutPlayer = false
+            val withWinners = freePersons > 0
 
 
             for (i in 0 until freePersons) {
@@ -66,8 +62,8 @@ class CreateRoundsUseCase {
                     "Freifahrt",
                     teamsKnockout[random],
                     null,
-                    0,
-                    10
+                    10,
+                    0
                 )
                 teamsKnockout = teamsKnockout.filter { it != round.firstTeam }
                 list = list.plus(round)
@@ -86,10 +82,6 @@ class CreateRoundsUseCase {
                         secondTeam = teamsKnockout[random]
                         teamsKnockout = teamsKnockout.filter { it != secondTeam }
                     }
-                    else {
-                        firstTeam = "Gewinner 1"
-                        secondTeam = "Gewinner 2"
-                    }
 
                     val round = Round.create(
                         RoundId(UUID.randomUUID().toString()),
@@ -104,13 +96,19 @@ class CreateRoundsUseCase {
                     )
                     list = list.plus(round)
                     roundsRepository.addRound(round)
-                    roundsWithoutPlayer = true
                 }
                 matches -= 1.0
                 roundsPerRound /= 2
                 freePersons = 0
+                roundsWithoutPlayer = true
+            }
+            if (withWinners) {
+                val roundsWinner = setWinnerToRoundUseCase(competitionId)
+                for (round in roundsWinner) {
+                    roundsRepository.updateRound(round)
+                }
             }
         }
-        return list.map { it -> it.id.value }
+        return list.map { it.id.value }
     }
 }

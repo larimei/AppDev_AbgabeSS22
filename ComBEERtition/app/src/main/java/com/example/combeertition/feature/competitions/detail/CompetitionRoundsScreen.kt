@@ -20,10 +20,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.combeertition.R
 import com.example.combeertition.data.ExpandableCardModel
-import com.example.combeertition.domain.model.CompetitionId
-import com.example.combeertition.domain.model.RoundId
-import com.example.combeertition.domain.model.Team
-import com.example.combeertition.domain.model.TeamId
+import com.example.combeertition.domain.model.*
 import com.example.combeertition.feature.components.ExpandableCard
 import com.example.combeertition.feature.teams.detail.TeamDetailViewModel
 
@@ -31,6 +28,7 @@ import com.example.combeertition.feature.teams.detail.TeamDetailViewModel
 fun CompetitionRoundsScreen(
     competitionId: String,
     viewModel: CompetitionRoundsViewModel = viewModel(),
+    viewModelComp: CompetitionDetailViewModel = viewModel(),
     viewModelTeam: TeamDetailViewModel = viewModel()
 ) {
 
@@ -38,13 +36,18 @@ fun CompetitionRoundsScreen(
         (emptyList())
     )
     val expandedCardIds = viewModel.expandedCardIdsList.collectAsState()
-    CompetitionRoundsScreenUI(
+    val competition = viewModelComp.bindUI(LocalContext.current, CompetitionId(competitionId))
+        .observeAsState()
+    competition.value?.let {
+        CompetitionRoundsScreenUI(
         expandedCardIds,
         viewModel::onCardArrowClicked,
         viewModelTeam::bindUI,
         viewModel::onEditRound,
-        rounds
+        rounds,
+            it
     )
+    }
 }
 
 
@@ -54,7 +57,8 @@ fun CompetitionRoundsScreenUI(
     onCardArrowClicked: (cardId: Int) -> Unit,
     onGetTeamById: (context: Context, teamId: TeamId) -> LiveData<Team?>,
     onEditRound: (roundId: RoundId, pointsFirst: Int, pointsSecond: Int) -> Unit,
-    rounds: List<ExpandableCardModel>
+    rounds: List<ExpandableCardModel>,
+    competition: Competition
 ) {
     if (rounds.isNotEmpty()) {
         Box() {
@@ -65,7 +69,8 @@ fun CompetitionRoundsScreenUI(
                         onCardArrowClick = { onCardArrowClicked(round.id) },
                         expanded = expandedCardIds.value.contains(round.id),
                         onGetTeamById,
-                        onEditRound
+                        onEditRound,
+                        mode = competition.mode
                     )
                 }
             }

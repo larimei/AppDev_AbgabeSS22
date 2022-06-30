@@ -20,6 +20,7 @@ class GetRoundsAsCardsUseCase() {
                 )
             }
         }
-        return cards.sortedBy { it.round?.round?.toInt() }
+        return if (comp?.mode == "Jeder-gegen-Jeden") cards.sortedBy { it.round?.round?.toInt() } else cards.sortedByDescending { it.round?.round?.toInt() }
+
     }
 }
