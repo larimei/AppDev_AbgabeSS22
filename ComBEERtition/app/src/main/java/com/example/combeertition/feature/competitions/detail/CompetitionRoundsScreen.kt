@@ -22,6 +22,7 @@ import com.example.combeertition.R
 import com.example.combeertition.data.ExpandableCardModel
 import com.example.combeertition.domain.model.*
 import com.example.combeertition.feature.components.ExpandableCard
+import com.example.combeertition.feature.teams.detail.TeamDetailUI
 import com.example.combeertition.feature.teams.detail.TeamDetailViewModel
 
 @Composable
@@ -40,13 +41,13 @@ fun CompetitionRoundsScreen(
         .observeAsState()
     competition.value?.let {
         CompetitionRoundsScreenUI(
-        expandedCardIds,
-        viewModel::onCardArrowClicked,
-        viewModelTeam::bindUI,
-        viewModel::onEditRound,
-        rounds,
+            expandedCardIds,
+            viewModel::onCardArrowClicked,
+            viewModelTeam::bindUI,
+            viewModel::onEditRound,
+            rounds,
             it
-    )
+        )
     }
 }
 
@@ -55,15 +56,15 @@ fun CompetitionRoundsScreen(
 fun CompetitionRoundsScreenUI(
     expandedCardIds: State<List<Int>>,
     onCardArrowClicked: (cardId: Int) -> Unit,
-    onGetTeamById: (context: Context, teamId: TeamId) -> LiveData<Team?>,
+    onGetTeamById: (context: Context, teamId: TeamId) -> LiveData<TeamDetailUI?>,
     onEditRound: (roundId: RoundId, pointsFirst: Int, pointsSecond: Int) -> Unit,
     rounds: List<ExpandableCardModel>,
-    competition: Competition
+    competition: CompetitionDetailUI
 ) {
     if (rounds.isNotEmpty()) {
         Box() {
             LazyColumn() {
-                items(rounds) {round ->
+                items(rounds) { round ->
                     ExpandableCard(
                         round = round,
                         onCardArrowClick = { onCardArrowClicked(round.id) },

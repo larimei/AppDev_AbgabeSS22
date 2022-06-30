@@ -1,6 +1,5 @@
 package com.example.combeertition.feature.competitions
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,17 +13,11 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.combeertition.R
-import com.example.combeertition.domain.model.CompetitionId
-import com.example.combeertition.feature.competition.CompetitionUI
 import com.example.combeertition.feature.main.ui.navControllerGlobal
-import com.example.combeertition.ui.theme.RsRed
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -55,7 +48,7 @@ fun CompetitionItem(competition: CompetitionUI) {
                 modifier = Modifier.fillMaxWidth().fillMaxHeight()
             ) {
                 Icon(
-                    painter = painterResource(competition.icon),
+                    painter = painterResource(R.drawable.ic_competition),
                     contentDescription = competition.name,
                     modifier = Modifier
                         .size(70.dp)

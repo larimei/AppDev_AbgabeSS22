@@ -1,18 +1,13 @@
 package com.example.combeertition.feature.competitions.detail
 
 import android.content.Context
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -41,10 +36,12 @@ import com.example.combeertition.data.playerRepository
 import com.example.combeertition.data.teamRepository
 import com.example.combeertition.domain.model.*
 import com.example.combeertition.feature.components.ColorPicker
+import com.example.combeertition.feature.components.DeleteOverlay
 import com.example.combeertition.feature.main.ui.navControllerGlobal
 import com.example.combeertition.feature.player.detail.Stat
 import com.example.combeertition.feature.teams.detail.AddPlayerToTeamsOverlay
 import com.example.combeertition.feature.teams.detail.AddTeamsOverlay
+import com.example.combeertition.feature.teams.detail.TeamDetailUI
 import com.example.combeertition.feature.teams.detail.TeamDetailViewModel
 import com.example.combeertition.ui.theme.RsBlue
 import com.example.combeertition.ui.theme.RsRed
@@ -59,7 +56,7 @@ fun CompetitionInformationScreen(
     competitionIdString: String,
     viewModel: CompetitionDetailViewModel = viewModel(),
     viewModelTeam: TeamDetailViewModel = viewModel(),
-    competition: Competition?,
+    competition: CompetitionDetailUI?,
     color: MutableState<Color>
 ) {
 
@@ -75,14 +72,15 @@ fun CompetitionInformationScreen(
 }
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CompetitionDetailScreenUI(
     competitionIdString: String?,
-    competition: Competition?,
+    competition: CompetitionDetailUI?,
     onAddCompetition: (name: String, color: Color, teams: List<String>, mode: String) -> Unit,
     onUpdateCompetition: (competitionId: CompetitionId, name: String, color: Color, teams: List<String>, mode: String) -> Unit,
     onDeleteCompetition: (competitionId: CompetitionId) -> Unit,
-    onGetTeamById: (context: Context, teamId: TeamId) -> LiveData<Team?>,
+    onGetTeamById: (context: Context, teamId: TeamId) -> LiveData<TeamDetailUI?>,
     color: MutableState<Color>
 ) {
 
@@ -93,6 +91,7 @@ fun CompetitionDetailScreenUI(
         }
         val openDialog = remember { mutableStateOf(false) }
         val openDialogTeam = remember { mutableStateOf(false) }
+        val openDialogSave = remember { mutableStateOf(false) }
 
         var name by remember { mutableStateOf(competition?.name ?: "Turniername") }
 
@@ -118,8 +117,7 @@ fun CompetitionDetailScreenUI(
                 ) {
                     IconButton(onClick = { openDialog.value = true }) {
                         Icon(
-                            painter = painterResource(
-                                competition?.icon ?: R.drawable.ic_competition
+                            painter = painterResource(R.drawable.ic_competition
                             ),
                             contentDescription = name,
                             modifier = Modifier
@@ -150,7 +148,7 @@ fun CompetitionDetailScreenUI(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .fillMaxSize()
-                        .offset(y = 100.dp)
+                        .offset(y = 50.dp)
                 ) {
                     Text(
                         text = name,
@@ -170,10 +168,10 @@ fun CompetitionDetailScreenUI(
                         value = name,
                         onValueChange = { name = it },
                         modifier = Modifier
-                            .padding(horizontal = 40.dp, vertical = 20.dp)
+                            .padding(horizontal = 40.dp, vertical = 10.dp)
                             .fillMaxWidth()
                     )
-                    Row {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         RadioButton(selected = mode == "Knockout", onClick = { mode = "Knockout" })
                         Text(
                             text = "Knockout",
@@ -186,15 +184,15 @@ fun CompetitionDetailScreenUI(
                             selected = mode == "Jeder-gegen-Jeden",
                             onClick = { mode = "Jeder-gegen-Jeden" })
                         Text(
-                            text = "Jeder-gegen-Jeden",
+                            text = "Jeder-vs-Jeden",
                             modifier = Modifier
                                 .clickable(onClick = { mode = "Jeder-gegen-Jeden" })
                                 .padding(start = 4.dp)
                         )
                     }
-                    Box(modifier = Modifier.height(60.dp)) {
+                    Box(modifier = Modifier.height(50.dp)) {
                         val scrollState = rememberLazyListState()
-                        LazyColumn(state = scrollState, modifier = Modifier.height(100.dp)) {
+                        LazyVerticalGrid(state = scrollState, cells = GridCells.Adaptive(minSize = 100.dp)) {
                             items(teams.value) { team ->
                                 Row(
                                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -244,14 +242,16 @@ fun CompetitionDetailScreenUI(
                                 onDeleteCompetition(competition.id)
                             }, modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 8.dp)
+                                .padding(horizontal = 4.dp)
 
                         ) {
                             Row() {
                                 Icon(
                                     painterResource(R.drawable.ic_baseline_delete_24),
                                     contentDescription = "delete comp",
-                                    modifier = Modifier.padding(horizontal = 4.dp)
+                                    modifier = Modifier
+                                        .padding(horizontal = 4.dp)
+                                        .height(20.dp)
                                 )
                                 Text(
                                     text = ("Löschen"),
@@ -273,13 +273,7 @@ fun CompetitionDetailScreenUI(
                                 )
                             else
                                 if (competition != null) {
-                                    onUpdateCompetition(
-                                        competitionId,
-                                        name,
-                                        color.value,
-                                        teams.value,
-                                        mode
-                                    )
+                                    openDialogSave.value = true
                                 }
                         }, modifier = Modifier
                             .fillMaxWidth()
@@ -290,7 +284,9 @@ fun CompetitionDetailScreenUI(
                                 painterResource(R.drawable.ic_baseline_save_24),
                                 contentDescription = "add Competition",
                                 tint = Color.White,
-                                modifier = Modifier.padding(horizontal = 4.dp)
+                                modifier  = Modifier
+                                    .padding(horizontal = 4.dp)
+                                    .height(20.dp)
                             )
                             Text(
                                 text = (if (competitionId == null) "Hinzufügen" else "Speichern"),
@@ -306,6 +302,19 @@ fun CompetitionDetailScreenUI(
                 }
                 if (openDialogTeam.value) {
                     AddTeamsToCompetitionOverlay(openDialog = openDialogTeam, teams)
+                }
+                if (openDialogSave.value) {
+                    if (competitionId != null) {
+                        SaveOverlay(
+                            openDialog = openDialogSave,
+                            onUpdateCompetition =  onUpdateCompetition,
+                            competitionId = competitionId,
+                            name = name,
+                            color = color.value,
+                            teams = teams.value,
+                            mode = mode
+                        )
+                    }
                 }
             }
         }

@@ -39,7 +39,6 @@ class UpdateTeamUseCase {
             Team.create(
                 teamId,
                 name,
-                R.drawable.ic_team,
                 color,
                 players,
                 wins,

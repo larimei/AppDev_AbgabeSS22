@@ -10,7 +10,6 @@ data class TeamDb(
     @PrimaryKey
     val teamId: String,
     val name: String,
-    val icon: Int,
     val color: Int,
     val wins: Int,
     val looses: Int,

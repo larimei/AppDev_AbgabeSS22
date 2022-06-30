@@ -43,6 +43,7 @@ import com.example.combeertition.ui.theme.RsYellow
 import com.github.skydoves.colorpicker.compose.ColorEnvelope
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
+import com.google.accompanist.pager.pagerTabIndicatorOffset
 import java.util.*
 
 @Composable
@@ -63,7 +64,7 @@ fun PlayerDetailScreen(playerIdString: String, viewModel: PlayerDetailViewModel 
 @Composable
 fun PlayerDetailScreenUI(
     playerIdString: String?,
-    player: Player?,
+    player: PlayerDetailUI?,
     onAddPlayer: (playerId: PlayerId, name: String, icon: Int, color: Color) -> Unit,
     onUpdatePlayer: (playerId: PlayerId, name: String, color: Color, wins: Int, looses: Int, matches: Int) -> Unit,
     onDeletePlayer: (playerId: PlayerId) -> Unit,
@@ -136,7 +137,7 @@ fun PlayerDetailScreenUI(
                 ) {
                     IconButton(onClick = { openDialog.value = true }) {
                         Icon(
-                            painter = painterResource(player?.icon ?: R.drawable.ic_player),
+                            painter = painterResource(R.drawable.ic_player),
                             contentDescription = name,
                             modifier = Modifier
                                 .size(150.dp)
@@ -165,8 +166,7 @@ fun PlayerDetailScreenUI(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .fillMaxSize()
-                        .offset(y = 100.dp)
-                        .verticalScroll(scrollState)
+                        .offset(y = 60.dp)
                 ) {
                     Text(
                         text = name,
@@ -190,9 +190,9 @@ fun PlayerDetailScreenUI(
                             .fillMaxWidth()
                     )
 
-                    Box() {
+                    Box {
                         Column(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp)
                         ) {
                             Text(
                                 text = "Statistiken:",
@@ -203,24 +203,20 @@ fun PlayerDetailScreenUI(
                             Spacer(modifier = Modifier.height(4.dp))
 
                             if (player?.matches != 0 && player != null) {
-                                player?.let {
-                                    Stat(
-                                        statName = "Gewonnen",
-                                        statValue = it.wins,
-                                        statMaxValue = it.matches,
-                                        statColor = RsYellow,
-                                        animDelay = 10
-                                    )
-                                }
-                                player?.let {
-                                    Stat(
-                                        statName = "Verloren",
-                                        statValue = it.looses,
-                                        statMaxValue = it.matches,
-                                        statColor = RsRed,
-                                        animDelay = 10
-                                    )
-                                }
+                                Stat(
+                                    statName = "Gewonnen",
+                                    statValue = player.wins,
+                                    statMaxValue = player.matches,
+                                    statColor = RsYellow,
+                                    animDelay = 10
+                                )
+                                Stat(
+                                    statName = "Verloren",
+                                    statValue = player.looses,
+                                    statMaxValue = player.matches,
+                                    statColor = RsRed,
+                                    animDelay = 10
+                                )
                             } else {
                                 Stat(
                                     statName = "Noch nichts gewonnen",
@@ -242,7 +238,6 @@ fun PlayerDetailScreenUI(
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.height(130.dp))
                     if (player != null) {
                         Button(
                             colors = ButtonDefaults.buttonColors(
@@ -257,14 +252,16 @@ fun PlayerDetailScreenUI(
                                 }
                             }, modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 40.dp)
+                                .padding(horizontal = 8.dp)
 
                         ) {
                             Row() {
                                 Icon(
                                     painterResource(R.drawable.ic_baseline_delete_24),
                                     contentDescription = "delete player",
-                                    modifier = Modifier.padding(horizontal = 4.dp)
+                                    modifier = Modifier
+                                        .padding(horizontal = 4.dp)
+                                        .height(20.dp)
                                 )
                                 Text(
                                     text = ("Löschen"),
@@ -296,14 +293,16 @@ fun PlayerDetailScreenUI(
                                     )
                         }, modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 40.dp)
+                            .padding(horizontal = 8.dp)
                     ) {
                         Row() {
                             Icon(
                                 painterResource(R.drawable.ic_baseline_save_24),
                                 contentDescription = "add player",
                                 tint = Color.White,
-                                modifier = Modifier.padding(horizontal = 4.dp)
+                                modifier = Modifier
+                                    .padding(horizontal = 4.dp)
+                                    .height(20.dp)
                             )
                             Text(
                                 text = (if (playerId == null) "Hinzufügen" else "Speichern"),

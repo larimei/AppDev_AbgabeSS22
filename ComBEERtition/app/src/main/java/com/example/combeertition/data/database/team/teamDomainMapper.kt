@@ -8,7 +8,6 @@ import com.example.combeertition.domain.model.TeamId
 fun teamToDb(team: Team): TeamDb = TeamDb(
     teamId = team.id.value,
     name = team.name,
-    icon = team.icon,
     color = team.color.toArgb(),
     wins = team.wins,
     looses = team.looses,
@@ -22,7 +21,6 @@ fun teamFromDb(teamPlayerRelation: TeamWithPlayers): Team? {
     return Team.create(
         id = TeamId(teamPlayerRelation.team.teamId),
         name = teamPlayerRelation.team.name,
-        icon = teamPlayerRelation.team.icon,
         color = Color(teamPlayerRelation.team.color),
         players = teamPlayerRelation.players.mapNotNull { it.playerId },
         wins = teamPlayerRelation.team.wins,

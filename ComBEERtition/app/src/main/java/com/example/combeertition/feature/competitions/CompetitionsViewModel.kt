@@ -6,7 +6,6 @@ import com.example.combeertition.domain.competition.DeleteCompetitionUseCase
 import com.example.combeertition.domain.competition.GetCompetitionByIdUseCase
 import com.example.combeertition.domain.competition.GetCompetitionsUseCase
 import com.example.combeertition.domain.model.CompetitionId
-import com.example.combeertition.feature.competition.CompetitionUI
 import kotlinx.coroutines.launch
 
 
@@ -17,7 +16,6 @@ class CompetitionsViewModel : ViewModel() {
                 CompetitionUI(
                     id = competition.id,
                     name = competition.name,
-                    icon = competition.icon,
                     color = competition.color,
                     mode = competition.mode
                 )

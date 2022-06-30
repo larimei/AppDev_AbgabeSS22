@@ -13,7 +13,6 @@ class Competition private constructor(
     val teams: List<String>,
     val mode: String,
     val rounds: List<String>,
-    val icon: Int,
     val color: Color,
     val created: ZonedDateTime,
     val updated: ZonedDateTime,
@@ -37,14 +36,13 @@ class Competition private constructor(
         fun create(
             id: CompetitionId,
             name: String,
-            icon: Int,
             teams: List<String>,
             mode: String,
             rounds: List<String>,
             color: Color
         ): Competition {
             val now = ZonedDateTime.now()
-            return Competition(id, name, teams, mode, rounds, icon, color, now, now, now)
+            return Competition(id, name, teams, mode, rounds, color, now, now, now)
         }
     }
 }

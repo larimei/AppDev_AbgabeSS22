@@ -5,10 +5,13 @@ import com.example.combeertition.data.playerRepository
 import com.example.combeertition.data.roundsRepository
 import com.example.combeertition.data.teamRepository
 import com.example.combeertition.domain.model.*
+import com.example.combeertition.feature.main.ui.navControllerGlobal
 
 class UpdateRoundUseCase(private val setWinnerToRoundUseCase: SetWinnerToRoundUseCase) {
     suspend operator fun invoke(roundId: RoundId, pointsFirst: Int, pointsSecond: Int): Boolean {
         val updatedRound = roundsRepository.getRoundById(roundId)
+        val comp = updatedRound?.let { CompetitionId(it.competition) }
+            ?.let { competitionRepository.getCompetitionById(it) }
 
         if (updatedRound != null) {
             if (pointsFirst == 0) {
@@ -26,10 +29,12 @@ class UpdateRoundUseCase(private val setWinnerToRoundUseCase: SetWinnerToRoundUs
                     )
                 )
 
-                if (competitionRepository.getCompetitionById(CompetitionId(updatedRound.competition))?.mode == "Knockout") {
-                    val roundsWinner = setWinnerToRoundUseCase(CompetitionId(updatedRound.competition))
-                    for (round in roundsWinner) {
-                        roundsRepository.updateRound(round)
+                if (comp != null) {
+                    if (comp.mode == "Knockout") {
+                        val roundsWinner = setWinnerToRoundUseCase(comp.teams, CompetitionId(updatedRound.competition))
+                        for (round in roundsWinner) {
+                            roundsRepository.updateRound(round)
+                        }
                     }
                 }
                 var team = teamRepository.getTeamById(TeamId(updatedRound.firstTeam))
@@ -39,7 +44,6 @@ class UpdateRoundUseCase(private val setWinnerToRoundUseCase: SetWinnerToRoundUs
                         Team.create(
                             team.id,
                             team.name,
-                            team.icon,
                             team.color,
                             team.players,
                             team.wins,
@@ -55,7 +59,6 @@ class UpdateRoundUseCase(private val setWinnerToRoundUseCase: SetWinnerToRoundUs
                                 Player.create(
                                     player.id,
                                     player.name,
-                                    player.icon,
                                     player.color,
                                     player.wins,
                                     player.looses + 1,
@@ -73,7 +76,6 @@ class UpdateRoundUseCase(private val setWinnerToRoundUseCase: SetWinnerToRoundUs
                         Team.create(
                             team.id,
                             team.name,
-                            team.icon,
                             team.color,
                             team.players,
                             team.wins + 1,
@@ -88,7 +90,6 @@ class UpdateRoundUseCase(private val setWinnerToRoundUseCase: SetWinnerToRoundUs
                                 Player.create(
                                     player.id,
                                     player.name,
-                                    player.icon,
                                     player.color,
                                     player.wins + 1,
                                     player.looses,
@@ -112,10 +113,12 @@ class UpdateRoundUseCase(private val setWinnerToRoundUseCase: SetWinnerToRoundUs
                         pointsSecond
                     )
                 )
-                if (competitionRepository.getCompetitionById(CompetitionId(updatedRound.competition))?.mode == "Knockout") {
-                    val roundsWinner = setWinnerToRoundUseCase(CompetitionId(updatedRound.competition))
-                    for (round in roundsWinner) {
-                        roundsRepository.updateRound(round)
+                if (comp != null) {
+                    if (comp.mode == "Knockout") {
+                        val roundsWinner = setWinnerToRoundUseCase(comp.teams, CompetitionId(updatedRound.competition))
+                        for (round in roundsWinner) {
+                            roundsRepository.updateRound(round)
+                        }
                     }
                 }
 
@@ -126,7 +129,6 @@ class UpdateRoundUseCase(private val setWinnerToRoundUseCase: SetWinnerToRoundUs
                         Team.create(
                             team.id,
                             team.name,
-                            team.icon,
                             team.color,
                             team.players,
                             team.wins + 1,
@@ -141,7 +143,6 @@ class UpdateRoundUseCase(private val setWinnerToRoundUseCase: SetWinnerToRoundUs
                                 Player.create(
                                     player.id,
                                     player.name,
-                                    player.icon,
                                     player.color,
                                     player.wins + 1,
                                     player.looses,
@@ -157,7 +158,6 @@ class UpdateRoundUseCase(private val setWinnerToRoundUseCase: SetWinnerToRoundUs
                         Team.create(
                             team.id,
                             team.name,
-                            team.icon,
                             team.color,
                             team.players,
                             team.wins,
@@ -172,7 +172,6 @@ class UpdateRoundUseCase(private val setWinnerToRoundUseCase: SetWinnerToRoundUs
                                 Player.create(
                                     player.id,
                                     player.name,
-                                    player.icon,
                                     player.color,
                                     player.wins,
                                     player.looses + 1,

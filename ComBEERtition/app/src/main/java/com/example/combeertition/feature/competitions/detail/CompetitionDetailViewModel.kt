@@ -22,10 +22,20 @@ import kotlinx.coroutines.launch
 
 class CompetitionDetailViewModel : ViewModel() {
 
-    fun bindUI(context: Context, competitionId: CompetitionId): LiveData<Competition?> = liveData {
-        val state = GetCompetitionByIdUseCase()(competitionId)
-        emit(state)
-    }
+    fun bindUI(context: Context, competitionId: CompetitionId): LiveData<CompetitionDetailUI?> =
+        liveData {
+            val competition = GetCompetitionByIdUseCase()(competitionId)
+            val state = competition?.let {
+                CompetitionDetailUI(
+                    it.id,
+                    competition.name,
+                    competition.color,
+                    competition.mode,
+                    competition.teams
+                )
+            }
+            emit(state)
+        }
 
     fun onAddCompetition(
         name: String,
@@ -53,7 +63,13 @@ class CompetitionDetailViewModel : ViewModel() {
         mode: String,
     ) {
         viewModelScope.launch {
-            UpdateCompetitionUseCase(CreateRoundsUseCase(SetWinnerToRoundUseCase()))(competitionId, name, color, teams, mode)
+            UpdateCompetitionUseCase(CreateRoundsUseCase(SetWinnerToRoundUseCase()))(
+                competitionId,
+                name,
+                color,
+                teams,
+                mode
+            )
             navControllerGlobal?.popBackStack()
             navControllerGlobal?.navigate("competition/" + competitionId.value)
         }

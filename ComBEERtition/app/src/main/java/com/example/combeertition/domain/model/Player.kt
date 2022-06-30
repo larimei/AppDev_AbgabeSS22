@@ -10,7 +10,6 @@ value class PlayerId(val value: String)
 class Player private constructor(
     val id: PlayerId,
     val name: String,
-    val icon: Int,
     val color: Color,
     val wins: Int,
     val looses: Int,
@@ -38,14 +37,13 @@ class Player private constructor(
         fun create(
             id: PlayerId,
             name: String,
-            icon: Int,
             color: Color,
             wins: Int,
             looses: Int,
             matches: Int
         ): Player {
             val now = ZonedDateTime.now()
-            return Player(id, name, icon, color, wins, looses, matches, now, now, now)
+            return Player(id, name, color, wins, looses, matches, now, now, now)
         }
     }
 }

@@ -37,7 +37,6 @@ class UpdateCompetitionUseCase(private val createRoundsUseCase: CreateRoundsUseC
         competitionRepository.updateCompetition(Competition.create(
             competitionId,
             name,
-            R.drawable.ic_competition,
             teams,
             mode,
             rounds,

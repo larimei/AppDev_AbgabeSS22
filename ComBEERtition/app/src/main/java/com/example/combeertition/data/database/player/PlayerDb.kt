@@ -8,7 +8,6 @@ data class PlayerDb(
     @PrimaryKey
     val playerId: String,
     val name: String,
-    val icon: Int,
     val color: Int,
     val wins: Int,
     val looses: Int,

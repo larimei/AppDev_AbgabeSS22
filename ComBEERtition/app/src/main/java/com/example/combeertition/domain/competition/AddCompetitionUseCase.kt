@@ -36,7 +36,6 @@ class AddCompetitionUseCase(private val createRoundsUseCase: CreateRoundsUseCase
             Competition.create(
                 competitionId,
                 name,
-                R.drawable.ic_competition,
                 teams,
                 mode,
                 rounds,

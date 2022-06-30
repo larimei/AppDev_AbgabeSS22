@@ -55,7 +55,7 @@ fun PlayerItem(player: PlayerUI) {
                 modifier = Modifier.fillMaxWidth().fillMaxHeight()
             ) {
                 Icon(
-                    painter = painterResource(player.icon),
+                    painter = painterResource(R.drawable.ic_player),
                     contentDescription = player.name,
                     modifier = Modifier
                         .size(70.dp)

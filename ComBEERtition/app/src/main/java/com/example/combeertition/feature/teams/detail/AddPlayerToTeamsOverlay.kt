@@ -61,7 +61,7 @@ fun AddPlayersToTeamOverlayUi(
             Box(
                 modifier = Modifier
                     .wrapContentSize(align = Alignment.TopStart)
-                    .height(500.dp)
+                    .height(400.dp)
             ) {
                 LazyColumn() {
                     items(playersList) { player ->

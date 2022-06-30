@@ -47,7 +47,7 @@ fun CompetitionDetailScreen(
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
 @Composable
-fun CompetitionDetailUIScreen(competitionIdString: String, competition: Competition?) {
+fun CompetitionDetailUIScreen(competitionIdString: String, competition: CompetitionDetailUI?) {
     var tabIndex by remember { mutableStateOf(0) } // 1.
     val tabTitles = listOf("Info", "Runden")
     var color = remember { mutableStateOf(competition?.color ?: RsBlue) }

@@ -11,7 +11,6 @@ data class CompetitionDb(
     @PrimaryKey
     val competitionId: String,
     val name: String,
-    val icon: Int,
     val color: Int,
     val mode: String,
     val created: ZonedDateTime,

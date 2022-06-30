@@ -12,53 +12,6 @@ import com.example.combeertition.domain.model.CompetitionId
 val competitionRepository = CompetitionRepository(App.database.competitionDao())
 
 class CompetitionRepository(private val dao: CompetitionDao) {
-    private var allCompetitions = listOfNotNull(
-        Competition.create(
-            id = CompetitionId("bc"),
-            name = "Competition 2",
-            teams = emptyList(),
-            mode = "",
-            rounds = emptyList(),
-            icon = R.drawable.ic_competition,
-            color = Color.Magenta
-        ),
-        Competition.create(
-            id = CompetitionId("cc"),
-            name = "Competition 3",
-            teams = emptyList(),
-            mode = "",
-            rounds = emptyList(),
-            icon = R.drawable.ic_competition,
-            color = Color.Magenta
-        ),
-        Competition.create(
-            id = CompetitionId("ccc"),
-            name = "Competition 4",
-            teams = emptyList(),
-            mode = "",
-            rounds = emptyList(),
-            icon = R.drawable.ic_competition,
-            color = Color.Magenta
-        ),
-        Competition.create(
-            id = CompetitionId("ec"),
-            name = "Competition 5",
-            teams = emptyList(),
-            mode = "One vs One",
-            rounds = emptyList(),
-            icon = R.drawable.ic_competition,
-            color = Color.Magenta
-        ),
-        Competition.create(
-            id = CompetitionId("fc"),
-            name = "Competition 6",
-            teams = emptyList(),
-            mode = "Knockout",
-            rounds = emptyList(),
-            icon = R.drawable.ic_competition,
-            color = Color.Magenta
-        ),
-    )
 
     suspend fun getAllCompetitions(): List<Competition> =
         dao.getAll().mapNotNull { competitionFromDb(it) }

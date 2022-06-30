@@ -12,6 +12,6 @@ class UpdatePlayerUseCase {
     suspend operator fun invoke(playerId: PlayerId, name: String, color: Color, wins: Int, looses: Int, matches: Int) = withContext(
         Dispatchers.Default
     ) {
-        playerRepository.updatePlayer(Player.create(playerId, name, R.drawable.ic_player, color, wins, looses, matches))
+        playerRepository.updatePlayer(Player.create(playerId, name, color, wins, looses, matches))
     }
 }

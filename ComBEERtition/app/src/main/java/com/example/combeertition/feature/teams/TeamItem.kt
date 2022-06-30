@@ -54,7 +54,7 @@ fun TeamItem(team: TeamUI) {
                 modifier = Modifier.fillMaxWidth().fillMaxHeight()
             ) {
                 Icon(
-                    painter = painterResource(team.icon),
+                    painter = painterResource(R.drawable.ic_team),
                     contentDescription = team.name,
                     modifier = Modifier
                         .size(70.dp)

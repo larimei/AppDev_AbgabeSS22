@@ -15,14 +15,24 @@ import kotlinx.coroutines.launch
 
 class PlayerDetailViewModel : ViewModel() {
 
-    fun bindUI(context: Context, playerId: PlayerId): LiveData<Player?> = liveData {
-        val state = GetPlayerByIdUseCase()(playerId)
+    fun bindUI(context: Context, playerId: PlayerId): LiveData<PlayerDetailUI?> = liveData {
+        val player = GetPlayerByIdUseCase()(playerId)
+        val state = player?.let {
+            PlayerDetailUI(
+                id = it.id,
+                name = player.name,
+                color = player.color,
+                wins = player.wins,
+                looses = player.looses,
+                matches = player.matches
+            )
+        }
         emit(state)
     }
 
     fun onAddPlayer(playerId: PlayerId, name: String, icon: Int, color: Color) {
         viewModelScope.launch {
-            AddPlayerUseCase()(Player.create(playerId, name, icon, color, 0, 0, 0))
+            AddPlayerUseCase()(Player.create(playerId, name, color, 0, 0, 0))
             navControllerGlobal?.popBackStack()
             navControllerGlobal?.navigate("player/" + playerId.value)
         }

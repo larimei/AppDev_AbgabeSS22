@@ -7,6 +7,5 @@ import com.example.combeertition.domain.model.TeamId
 class TeamUI(
     val id: TeamId,
     val name: String,
-    @DrawableRes val icon: Int,
     val color: Color
 )

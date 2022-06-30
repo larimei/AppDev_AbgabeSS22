@@ -7,7 +7,6 @@ import com.example.combeertition.domain.model.*
 fun competitionToDb(competition: Competition): CompetitionDb = CompetitionDb(
     competitionId = competition.id.value,
     name = competition.name,
-    icon = competition.icon,
     color = competition.color.toArgb(),
     mode = competition.mode,
     created = competition.created,
@@ -21,7 +20,6 @@ fun competitionFromDb(
     return Competition.create(
         id = CompetitionId(competitionTeamRoundRelation.competition.competition.competitionId),
         name = competitionTeamRoundRelation.competition.competition.name,
-        icon = competitionTeamRoundRelation.competition.competition.icon,
         teams = competitionTeamRoundRelation.competition.teams.mapNotNull { it.teamId },
         mode = competitionTeamRoundRelation.competition.competition.mode,
         rounds = competitionTeamRoundRelation.rounds.mapNotNull { it.roundId },

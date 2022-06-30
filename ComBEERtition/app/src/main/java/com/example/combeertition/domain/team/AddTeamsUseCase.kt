@@ -100,7 +100,6 @@ class AddTeamsUseCase {
                 Team.create(
                     TeamId(UUID.randomUUID().toString()),
                     names[Random.nextInt(names.size)],
-                    R.drawable.ic_team,
                     Color.Blue,
                     emptyList(),
                     0,
